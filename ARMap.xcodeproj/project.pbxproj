@@ -13,6 +13,9 @@
 		63C9318C222CDB0E00DF5850 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63C9318A222CDB0E00DF5850 /* Main.storyboard */; };
 		63C9318E222CDB0E00DF5850 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63C9318D222CDB0E00DF5850 /* Assets.xcassets */; };
 		63C93191222CDB0E00DF5850 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63C9318F222CDB0E00DF5850 /* LaunchScreen.storyboard */; };
+		63C93199222CDC6200DF5850 /* MapViiewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C93198222CDC6200DF5850 /* MapViiewController.swift */; };
+		63C9319B222CE8A600DF5850 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C9319A222CE8A600DF5850 /* MapKit.framework */; };
+		E11CF30FC5324561D5A2F867 /* Pods_ARMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933B996FF214E312FF15AAE3 /* Pods_ARMap.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,11 @@
 		63C9318D222CDB0E00DF5850 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63C93190222CDB0E00DF5850 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		63C93192222CDB0E00DF5850 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63C93198222CDC6200DF5850 /* MapViiewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViiewController.swift; sourceTree = "<group>"; };
+		63C9319A222CE8A600DF5850 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		933B996FF214E312FF15AAE3 /* Pods_ARMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.release.xcconfig"; path = "Target Support Files/Pods-ARMap/Pods-ARMap.release.xcconfig"; sourceTree = "<group>"; };
+		BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.debug.xcconfig"; path = "Target Support Files/Pods-ARMap/Pods-ARMap.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +39,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63C9319B222CE8A600DF5850 /* MapKit.framework in Frameworks */,
+				E11CF30FC5324561D5A2F867 /* Pods_ARMap.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		03F22A8D877835FA93C9FFEE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */,
+				961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		63C93178222CDB0E00DF5850 = {
 			isa = PBXGroup;
 			children = (
 				63C93183222CDB0E00DF5850 /* ARMap */,
 				63C93182222CDB0E00DF5850 /* Products */,
+				03F22A8D877835FA93C9FFEE /* Pods */,
+				FFF8BE1ED4E0D2D4EA621041 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -59,12 +80,22 @@
 				63C93184222CDB0E00DF5850 /* AppDelegate.swift */,
 				63C93186222CDB0E00DF5850 /* art.scnassets */,
 				63C93188222CDB0E00DF5850 /* ViewController.swift */,
+				63C93198222CDC6200DF5850 /* MapViiewController.swift */,
 				63C9318A222CDB0E00DF5850 /* Main.storyboard */,
 				63C9318D222CDB0E00DF5850 /* Assets.xcassets */,
 				63C9318F222CDB0E00DF5850 /* LaunchScreen.storyboard */,
 				63C93192222CDB0E00DF5850 /* Info.plist */,
 			);
 			path = ARMap;
+			sourceTree = "<group>";
+		};
+		FFF8BE1ED4E0D2D4EA621041 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				63C9319A222CE8A600DF5850 /* MapKit.framework */,
+				933B996FF214E312FF15AAE3 /* Pods_ARMap.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +105,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63C93195222CDB0E00DF5850 /* Build configuration list for PBXNativeTarget "ARMap" */;
 			buildPhases = (
+				499B2E312682AAEFA04810F4 /* [CP] Check Pods Manifest.lock */,
 				63C9317D222CDB0E00DF5850 /* Sources */,
 				63C9317E222CDB0E00DF5850 /* Frameworks */,
 				63C9317F222CDB0E00DF5850 /* Resources */,
+				99CD29A6E524ADCE85B4D510 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -99,6 +132,11 @@
 				TargetAttributes = {
 					63C93180222CDB0E00DF5850 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -134,12 +172,60 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		499B2E312682AAEFA04810F4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ARMap-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		99CD29A6E524ADCE85B4D510 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SCNPath/SCNPath.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SCNPath.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		63C9317D222CDB0E00DF5850 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				63C93189222CDB0E00DF5850 /* ViewController.swift in Sources */,
+				63C93199222CDC6200DF5850 /* MapViiewController.swift in Sources */,
 				63C93185222CDB0E00DF5850 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,6 +370,7 @@
 		};
 		63C93196222CDB0E00DF5850 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -302,6 +389,7 @@
 		};
 		63C93197222CDB0E00DF5850 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
