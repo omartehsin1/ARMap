@@ -15,6 +15,8 @@
 		63C93191222CDB0E00DF5850 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63C9318F222CDB0E00DF5850 /* LaunchScreen.storyboard */; };
 		63C93199222CDC6200DF5850 /* MapViiewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C93198222CDC6200DF5850 /* MapViiewController.swift */; };
 		63C9319B222CE8A600DF5850 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C9319A222CE8A600DF5850 /* MapKit.framework */; };
+		63C9319D222D9F8D00DF5850 /* ExtensioToCoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C9319C222D9F8D00DF5850 /* ExtensioToCoreLocation.swift */; };
+		63C931A1222E26B900DF5850 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A0222E26B900DF5850 /* Node.swift */; };
 		E11CF30FC5324561D5A2F867 /* Pods_ARMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933B996FF214E312FF15AAE3 /* Pods_ARMap.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +31,8 @@
 		63C93192222CDB0E00DF5850 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63C93198222CDC6200DF5850 /* MapViiewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViiewController.swift; sourceTree = "<group>"; };
 		63C9319A222CE8A600DF5850 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		63C9319C222D9F8D00DF5850 /* ExtensioToCoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensioToCoreLocation.swift; sourceTree = "<group>"; };
+		63C931A0222E26B900DF5850 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Node.swift; path = /Users/david/Desktop/ARMap/ARMap/ARMap/Node.swift; sourceTree = "<absolute>"; };
 		933B996FF214E312FF15AAE3 /* Pods_ARMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.release.xcconfig"; path = "Target Support Files/Pods-ARMap/Pods-ARMap.release.xcconfig"; sourceTree = "<group>"; };
 		BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.debug.xcconfig"; path = "Target Support Files/Pods-ARMap/Pods-ARMap.debug.xcconfig"; sourceTree = "<group>"; };
@@ -77,10 +81,12 @@
 		63C93183222CDB0E00DF5850 /* ARMap */ = {
 			isa = PBXGroup;
 			children = (
+				63C931A0222E26B900DF5850 /* Node.swift */,
 				63C93184222CDB0E00DF5850 /* AppDelegate.swift */,
 				63C93186222CDB0E00DF5850 /* art.scnassets */,
 				63C93188222CDB0E00DF5850 /* ViewController.swift */,
 				63C93198222CDC6200DF5850 /* MapViiewController.swift */,
+				63C9319C222D9F8D00DF5850 /* ExtensioToCoreLocation.swift */,
 				63C9318A222CDB0E00DF5850 /* Main.storyboard */,
 				63C9318D222CDB0E00DF5850 /* Assets.xcassets */,
 				63C9318F222CDB0E00DF5850 /* LaunchScreen.storyboard */,
@@ -225,8 +231,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				63C93189222CDB0E00DF5850 /* ViewController.swift in Sources */,
+				63C931A1222E26B900DF5850 /* Node.swift in Sources */,
 				63C93199222CDC6200DF5850 /* MapViiewController.swift in Sources */,
 				63C93185222CDB0E00DF5850 /* AppDelegate.swift in Sources */,
+				63C9319D222D9F8D00DF5850 /* ExtensioToCoreLocation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

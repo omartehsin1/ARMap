@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 import CoreLocation
+import ARKit
+
 
 class MapViiewController: UIViewController {
 
@@ -23,6 +25,7 @@ class MapViiewController: UIViewController {
     
     var steps = [MKRoute.Step]()
     var polylines = [MKPolyline]()
+    private var currentPathPart = [[CLLocationCoordinate2D]]()
     
     
     override func viewDidLoad() {
@@ -30,7 +33,7 @@ class MapViiewController: UIViewController {
         locationManager.requestAlwaysAuthorization()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        
+        //get current location
         guard let myLocation = locationManager.location else {return}
         currentCoordinate = myLocation
         print("Current: \(currentCoordinate.coordinate)")
@@ -62,19 +65,23 @@ class MapViiewController: UIViewController {
                 guard let response = response else {return}
                 guard let primaryRoute = response.routes.first else {return}
                 print("Main Route Polyline : \(String(describing: primaryRoute.polyline.coordinate))")
-                
+                //Add each MKRoute.step to array of MKRouteSteps.
                 for step in primaryRoute.steps {
                    print(step.polyline.coordinate)
+                    self.steps.append(step)
                 }
-                
-                //print("Route Steps: \(String(describing: primaryRoute.steps.first?.polyline))")
-                
+                //Draw each line on 2d map
                 self.mapView.addOverlay(primaryRoute.polyline)
-                
-                self.steps = primaryRoute.steps
                 self.polylines = [primaryRoute.polyline]
-                
+                //self.steps = primaryRoute.steps
+                self.getLocation()
             }
+        }
+    }
+    
+     private func getLocation() {
+        for (index, step) in steps.enumerated() {
+            setPathFromStep(step, and: index)
         }
     }
 
@@ -83,10 +90,46 @@ class MapViiewController: UIViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
+        
+        let viewController = segue.destination as! ViewController
+        viewController.pathSteps = currentPathPart
         // Pass the selected object to the new view controller.
     }
+    
+    //MARK: - Get Parts of Path
+    
+    
+    private func setPathFromStep(_ pathStep: MKRoute.Step, and index: Int){
+        if index > 0 {
+            getPathPart(for: index, and: pathStep)
+        } else {
+            getFirstPath(for: pathStep)
+        }
+    }
+    
+    private func getFirstPath(for pathStep: MKRoute.Step){
+        let nextLocation = CLLocation(latitude: pathStep.polyline.coordinate.latitude, longitude: pathStep.polyline.coordinate.longitude)
+        let middleSteps = CLLocationCoordinate2D.getPathLocations(currentLocation: currentCoordinate, nextLocation: nextLocation)
+        currentPathPart.append(middleSteps)
+        for step in middleSteps {
+            print("Middle steps: \(step.latitude), \(step.longitude)")
+        }
+    }
 
+    private func getPathPart(for index: Int, and pathStep: MKRoute.Step) {
+        
+        let previousIndex = index - 1
+        let previousStep = steps[previousIndex]
+        let previousLocation = CLLocation(latitude: previousStep.polyline.coordinate.latitude, longitude: previousStep.polyline.coordinate.longitude)
+        
+        let nextLocation = CLLocation(latitude: pathStep.polyline.coordinate.latitude, longitude: pathStep.polyline.coordinate.longitude)
+        
+        let middleSteps = CLLocationCoordinate2D.getPathLocations(currentLocation: previousLocation, nextLocation: nextLocation)
+        currentPathPart.append(middleSteps)
+        for step in middleSteps {
+            //print("Middle steps: \(step.latitude), \(step.longitude)")
+        }
+    }
 
 }
 
@@ -98,11 +141,11 @@ extension MapViiewController: CLLocationManagerDelegate{
         
         mapView.userTrackingMode = .followWithHeading
         
-        
     }
 }
 
 extension MapViiewController: UISearchBarDelegate {
+    //get results from searchbar
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         let localSearchRequest = MKLocalSearch.Request()
@@ -125,13 +168,15 @@ extension MapViiewController: UISearchBarDelegate {
 
 extension MapViiewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        
+        //Display line on 2D map
         if overlay is MKPolyline {
             let renderer = MKPolylineRenderer(overlay: overlay)
             renderer.strokeColor = .blue
-            renderer.lineWidth = 8
+            renderer.lineWidth = 4
             return renderer
         }
         return MKOverlayRenderer()
     }
+    
+    
 }
