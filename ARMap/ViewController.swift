@@ -33,16 +33,27 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     private var done = false
     internal var mapAnnotations = [MapAnnotation]()
     private var annotationColor = UIColor.blue
+    let locationManager = CLLocationManager()
+    let regionRadius: CLLocationDistance = 800
+    private var locationUpdate = 0 {
+        didSet {
+            if locationUpdate >= 5 {
+                updateNodes = false
+                print("updateNodes: \(updateNodes)")
+            }
+        }
+    }
     
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         sceneView.debugOptions = .showFeaturePoints
-       
+        
         getCoordinates()
-        parceData()
         setUpScene()
+        setUpNavigation()
+        trackingLocation(for: myLocation)
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -61,22 +72,28 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         runSession()
     }
     
+    func setUpNavigation(){
+        locationManager.requestAlwaysAuthorization()
+        locationManager.delegate = self as? CLLocationManagerDelegate
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        
+        //get current location
+        guard let aLocation = locationManager.location else {return}
+        myLocation = aLocation
+        
+    }
+    
     func runSession(){
      let configuration = ARWorldTrackingConfiguration()
         configuration.worldAlignment = .gravityAndHeading
-        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-    }
-    
-    func parceData(){
-        for myStep in mySteps {
-            locations.append(CLLocation(latitude: myStep.latitude, longitude: myStep.longitude))
-        }
+        sceneView.session.run(configuration, options: [.resetTracking])
     }
     
     func trackingLocation(for currentLocation: CLLocation) {
         if currentLocation.horizontalAccuracy <= 65.0 {
             updateLocations.append(currentLocation)
-            updateNodePosition()
+            print("@6")
+            centerMapOnLocation(location: currentLocation.coordinate)
         }
     }
     
@@ -90,11 +107,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         //
         done = true
         //
+        trackingLocation(for: myLocation)
         updateNodes = true
         if updateLocations.count > 0 {
             myLocation = CLLocation.bestLocationEstimate(locations: updateLocations)
             if (myLocation != nil && done == true){
                 DispatchQueue.main.async {
+                    print("@1")
                     self.centerMapInInitialCoordinates()
                     self.addAnchors(steps: self.myRoute.steps)
                     self.showPointsOfInterestInMap(currentLegs: self.currentPathPart)
@@ -102,7 +121,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                 }
             }
         }
+        updateNodePosition()
     }
+    
+    // add info to AR nodes
+    private func addAnchors(steps: [MKRoute.Step]){
+        guard myLocation != nil && steps.count > 0 else {return}
+        for step in steps {
+            placeNode(for: step)
+        }
+        for location in locations {
+            placeNode(for: location)
+        }
+        print("@2")
+    }
+    
 
     //MARK: - Minimap crap
     private func showPointsOfInterestInMap(currentLegs: [[CLLocationCoordinate2D]]) {
@@ -114,6 +147,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
             }
         }
     }
+    
+    func centerMapOnLocation(location: CLLocationCoordinate2D){
+        let coordinateRegion = MKCoordinateRegion.init(center: location, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
     //adds anotations and overlay to minimap
     private func addAnnotations(){
         guard let map = mapView else {return}
@@ -125,20 +164,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                 } else {
                     self.annotationColor = .yellow
                 }
-                
+                print("@3")
                 map.addAnnotation(annotation)
                 map.addOverlay(MKCircle(center: annotation.coordinate, radius: 0.2))
             }
-        }
-    }
-    
-    private func addAnchors(steps: [MKRoute.Step]){
-        guard myLocation != nil && steps.count > 0 else {return}
-        for step in steps {
-            placeNode(for: step)
-        }
-        for location in locations {
-            placeNode(for: location)
         }
     }
     
@@ -147,9 +176,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         for pSteps in pathSteps {
             for step in pSteps {
                 mySteps.append(step)
-                print("Coordinates for AR: \(step)")
+                //print("Coordinates for AR: \(step)")
             }
         }
+        for myStep in mySteps {
+            locations.append(CLLocation(latitude: myStep.latitude, longitude: myStep.longitude))
+        }
+        //print("location: \(locations)")
     }
     //MARK: - Create AR Nodes
      // placeNode in between main locations
@@ -158,13 +191,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         let stepAnchor = ARAnchor(transform: locationTransform)
         let cube = Node(title: nil, location: location)
         anchors.append(stepAnchor)
-        cube.addCube(with: 0.5, and: .green)
+        cube.addCube(with: 0.1, and: .green)
         cube.location = location
         cube.anchor = stepAnchor
         //add node to scene
         sceneView.session.add(anchor: stepAnchor)
         sceneView.scene.rootNode.addChildNode(cube)
         nodes.append(cube)
+        print("@4")
     }
    // placeNode for Main points
     func placeNode(for step: MKRoute.Step){
@@ -173,17 +207,39 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         let stepAnchor = ARAnchor(transform: locationTransform)
         let cube = Node(title: step.instructions, location: stepLocation)
         anchors.append(stepAnchor)
-        cube.addNode(with: 1, and: .yellow, and: step.instructions)
+        cube.addNode(with: 0.1, and: .yellow, and: step.instructions)
         cube.location = stepLocation
         cube.anchor = stepAnchor
         //add node to scene
         sceneView.session.add(anchor: stepAnchor)
         sceneView.scene.rootNode.addChildNode(cube)
         nodes.append(cube)
+        print("@5")
     }
     
     private func updateNodePosition(){
-    
+        if updateNodes{
+            locationUpdate += 1
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 1
+            if updateLocations.count > 0 {
+                myLocation = CLLocation.bestLocationEstimate(locations: updateLocations)
+                for node in nodes {
+                    print("@7")
+                    let translation = Matrix.transformMatrix(for: matrix_identity_float4x4, originLocation: myLocation, location: node.location)
+                    let position = SCNVector3.positionForNode(transform: translation)
+                    let distance = node.location.distance(from: myLocation)
+                    DispatchQueue.main.async {
+                        let scale = 100 / Float(distance)
+                        node.scale = SCNVector3(x: scale, y: scale, z: scale)
+                        node.position = position
+                        node.anchor = ARAnchor(transform: translation)
+                        print("@8")
+                    }
+                }
+            }
+            SCNTransaction.commit()
+        }
     }
 
     

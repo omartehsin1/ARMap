@@ -9,6 +9,7 @@
 import Foundation
 import CoreLocation
 import MapKit
+import SceneKit
 
 extension CLLocationCoordinate2D {
     static func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D)-> Bool{
@@ -89,4 +90,11 @@ extension Double {
 struct LocationConstants {
     static let metersPerRadianLat: Double = 6373000.0
     static let metersPerRadianLon: Double = 5602900.0
+}
+
+extension SCNVector3 {
+    static func positionForNode(transform: matrix_float4x4)-> SCNVector3{
+        return SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+    }
+    
 }

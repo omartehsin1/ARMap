@@ -129,9 +129,9 @@ class MapViiewController: UIViewController {
         
         let middleSteps = CLLocationCoordinate2D.getPathLocations(currentLocation: previousLocation, nextLocation: nextLocation)
         currentPathPart.append(middleSteps)
-        for step in middleSteps {
+//        for step in middleSteps {
             //print("Middle steps: \(step.latitude), \(step.longitude)")
-        }
+//        }
     }
 
 }
