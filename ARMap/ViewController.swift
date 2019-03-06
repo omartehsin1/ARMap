@@ -13,57 +13,163 @@ import MapKit
 import SCNPath
 
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
 
+    //MARK: - Properties
+    @IBOutlet weak var mapView: MKMapView!
     @IBOutlet var sceneView: ARSCNView!
+    var myRoute = MKRoute()
     var pathSteps = [[CLLocationCoordinate2D]]()
-    var steps = [CLLocationCoordinate2D]()
+    //from previous VC
+    var mySteps = [CLLocationCoordinate2D]()
+    private var steps = [MKRoute.Step]()
+    private var anchors: [ARAnchor] = []
+    internal var myLocation: CLLocation!
+    private var locations = [CLLocation]()
     private var nodes = [Node]()
+    private var updateNodes = false
+    private var updateLocation = [CLLocation]()
+    private var currentPathPart = [[CLLocationCoordinate2D]]()
+    private var done = false
+    internal var mapAnnotations = [MapAnnotation]()
+    private var annotationColor = UIColor.blue
+    
+    
+    //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Set the view's delegate
-        sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
         sceneView.debugOptions = .showFeaturePoints
-        let scene = SCNScene()
-        sceneView.scene = scene
-        
+       
         getCoordinates()
+        setUpScene()
         
-
-    }
-    
-    @IBAction func backBtn(_ sender: UIButton) {
-        dismiss(animated: true, completion: nil)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-
-        // Run the view's session
-        sceneView.session.run(configuration)
-    }
-    
-    func getCoordinates(){
-        for pSteps in pathSteps {
-            for step in pSteps {
-                steps.append(step)
-                print("Coordinates for AR: \(step)")
-            }
-        }
-       
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         // Pause the view's session
         sceneView.session.pause()
     }
+    func setUpScene(){
+        sceneView.delegate = self
+        let scene = SCNScene()
+        sceneView.scene = scene
+        runSession()
+    }
+    
+    func runSession(){
+     let configuration = ARWorldTrackingConfiguration()
+        configuration.worldAlignment = .gravityAndHeading
+        sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+    }
+    
+    //MARK: - Actions
+    
+    @IBAction func backBtn(_ sender: UIButton) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func goBtn(_ sender: UIButton) {
+        //
+        done = true
+        //
+        updateNodes = true
+        if updateLocation.count > 0 {
+            myLocation = CLLocation.bestLocationEstimate(locations: updateLocation)
+            if (myLocation != nil && done == true){
+                DispatchQueue.main.async {
+                    self.centerMapInInitialCoordinates()
+                    self.addAnchors(steps: self.steps)
+                    self.showPointsOfInterestInMap(currentLegs: self.currentPathPart)
+                    self.addAnnotations()
+                }
+            }
+        }
+    }
+
+    //MARK: - Minimap crap
+    private func showPointsOfInterestInMap(currentLegs: [[CLLocationCoordinate2D]]) {
+        for leg in currentLegs {
+            for item in leg {
+                let mapAnnotation = MapAnnotation(coordinate: item, name: String(describing:item))
+                self.mapAnnotations.append(mapAnnotation)
+                self.mapView.addAnnotation(mapAnnotation)
+            }
+        }
+    }
+    //adds anotations and overlay to minimap
+    private func addAnnotations(){
+        guard let map = mapView else {return}
+        map.addOverlay(myRoute.polyline)
+        mapAnnotations.forEach { (annotation) in
+            DispatchQueue.main.async {
+                if annotation.title != nil {
+                   self.annotationColor = .green
+                } else {
+                    self.annotationColor = .yellow
+                }
+                
+                map.addAnnotation(annotation)
+                map.addOverlay(MKCircle(center: annotation.coordinate, radius: 0.2))
+            }
+        }
+    }
+    
+    private func addAnchors(steps: [MKRoute.Step]){
+        guard myLocation != nil && steps.count > 0 else {return}
+        for step in steps {
+            placeNode(for: step)
+        }
+        for location in locations {
+            placeNode(for: location)
+        }
+    }
+    
+    //gets coordinates
+    func getCoordinates(){
+        for pSteps in pathSteps {
+            for step in pSteps {
+                mySteps.append(step)
+                print("Coordinates for AR: \(step)")
+            }
+        }
+    }
+    //MARK: - Create AR Nodes
+     // placeNode in between main locations
+    func placeNode(for location: CLLocation){
+        let locationTransform = Matrix.transformMatrix(for: matrix_identity_float4x4, originLocation: myLocation, location: location)
+        let stepAnchor = ARAnchor(transform: locationTransform)
+        let cube = Node(title: nil, location: location)
+        anchors.append(stepAnchor)
+        cube.addCube(with: 0.5, and: .green)
+        cube.location = location
+        cube.anchor = stepAnchor
+        //add node to scene
+        sceneView.session.add(anchor: stepAnchor)
+        sceneView.scene.rootNode.addChildNode(cube)
+        nodes.append(cube)
+    }
+   // placeNode for Main points
+    func placeNode(for step: MKRoute.Step){
+        let stepLocation = step.getLocation()
+        let locationTransform = Matrix.transformMatrix(for: matrix_identity_float4x4, originLocation: myLocation, location: stepLocation)
+        let stepAnchor = ARAnchor(transform: locationTransform)
+        let cube = Node(title: step.instructions, location: stepLocation)
+        anchors.append(stepAnchor)
+        cube.addNode(with: 1, and: .yellow, and: step.instructions)
+        cube.location = stepLocation
+        cube.anchor = stepAnchor
+        //add node to scene
+        sceneView.session.add(anchor: stepAnchor)
+        sceneView.scene.rootNode.addChildNode(cube)
+        nodes.append(cube)
+    }
+
+    
+
 
     // MARK: - ARSCNViewDelegate
     

@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLocation
+import MapKit
 
 extension CLLocationCoordinate2D {
     static func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D)-> Bool{
@@ -58,7 +59,22 @@ extension CLLocation{
         let radiansHeading = atan2(y, x)
         return radiansHeading
     }
-    
+    //retrieve the location out of and array of locations you are closest to.
+    static func bestLocationEstimate(locations: [CLLocation]) -> CLLocation {
+        let sortedLocationEstimates = locations.sorted(by: {
+            if $0.horizontalAccuracy == $1.horizontalAccuracy {
+                return $0.timestamp > $1.timestamp
+            }
+            return $0.horizontalAccuracy < $1.horizontalAccuracy
+        })
+        return sortedLocationEstimates.first!
+    }
+}
+
+extension MKRoute.Step{
+    func getLocation() -> CLLocation{
+        return CLLocation(latitude: polyline.coordinate.latitude, longitude: polyline.coordinate.longitude)
+    }
 }
 
 extension Double {

@@ -23,8 +23,9 @@ class MapViiewController: UIViewController {
     let locationManager = CLLocationManager()
     var currentCoordinate = CLLocation(latitude: 43.717055, longitude: -79.330083)
     
-    var steps = [MKRoute.Step]()
-    var polylines = [MKPolyline]()
+    private var steps = [MKRoute.Step]()
+    private var polylines = [MKPolyline]()
+    private var route = MKRoute()
     private var currentPathPart = [[CLLocationCoordinate2D]]()
     
     
@@ -64,6 +65,7 @@ class MapViiewController: UIViewController {
             } else {
                 guard let response = response else {return}
                 guard let primaryRoute = response.routes.first else {return}
+                self.route = primaryRoute
                 print("Main Route Polyline : \(String(describing: primaryRoute.polyline.coordinate))")
                 //Add each MKRoute.step to array of MKRouteSteps.
                 for step in primaryRoute.steps {
@@ -93,6 +95,7 @@ class MapViiewController: UIViewController {
         
         let viewController = segue.destination as! ViewController
         viewController.pathSteps = currentPathPart
+        viewController.myRoute = route
         // Pass the selected object to the new view controller.
     }
     
