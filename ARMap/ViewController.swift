@@ -28,7 +28,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     private var locations = [CLLocation]()
     private var nodes = [Node]()
     private var updateNodes = false
-    private var updateLocation = [CLLocation]()
+    private var updateLocations = [CLLocation]()
     private var currentPathPart = [[CLLocationCoordinate2D]]()
     private var done = false
     internal var mapAnnotations = [MapAnnotation]()
@@ -41,6 +41,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         sceneView.debugOptions = .showFeaturePoints
        
         getCoordinates()
+        parceData()
         setUpScene()
         
     }
@@ -66,6 +67,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
     
+    func parceData(){
+        for myStep in mySteps {
+            locations.append(CLLocation(latitude: myStep.latitude, longitude: myStep.longitude))
+        }
+    }
+    
+    func trackingLocation(for currentLocation: CLLocation) {
+        if currentLocation.horizontalAccuracy <= 65.0 {
+            updateLocations.append(currentLocation)
+            updateNodePosition()
+        }
+    }
+    
     //MARK: - Actions
     
     @IBAction func backBtn(_ sender: UIButton) {
@@ -77,12 +91,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         done = true
         //
         updateNodes = true
-        if updateLocation.count > 0 {
-            myLocation = CLLocation.bestLocationEstimate(locations: updateLocation)
+        if updateLocations.count > 0 {
+            myLocation = CLLocation.bestLocationEstimate(locations: updateLocations)
             if (myLocation != nil && done == true){
                 DispatchQueue.main.async {
                     self.centerMapInInitialCoordinates()
-                    self.addAnchors(steps: self.steps)
+                    self.addAnchors(steps: self.myRoute.steps)
                     self.showPointsOfInterestInMap(currentLegs: self.currentPathPart)
                     self.addAnnotations()
                 }
@@ -166,6 +180,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         sceneView.session.add(anchor: stepAnchor)
         sceneView.scene.rootNode.addChildNode(cube)
         nodes.append(cube)
+    }
+    
+    private func updateNodePosition(){
+    
     }
 
     
