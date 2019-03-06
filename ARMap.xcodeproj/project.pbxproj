@@ -15,7 +15,6 @@
 		63C93191222CDB0E00DF5850 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63C9318F222CDB0E00DF5850 /* LaunchScreen.storyboard */; };
 		63C9319B222CE8A600DF5850 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C9319A222CE8A600DF5850 /* MapKit.framework */; };
 		63C9319D222D9F8D00DF5850 /* ExtensioToCoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C9319C222D9F8D00DF5850 /* ExtensioToCoreLocation.swift */; };
-		63C931A1222E26B900DF5850 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A0222E26B900DF5850 /* Node.swift */; };
 		63C931A3222F40F900DF5850 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A2222F40F900DF5850 /* Matrix.swift */; };
 		63C931A5222F7ACD00DF5850 /* MapExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A4222F7ACD00DF5850 /* MapExtension.swift */; };
 		63C931A9222F804A00DF5850 /* MapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A8222F804A00DF5850 /* MapAnnotation.swift */; };
@@ -26,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5C2B0E28D766C80006A0CF1D /* Pods-ARMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARMap/Pods-ARMap.debug.xcconfig"; sourceTree = "<group>"; };
 		63C93181222CDB0E00DF5850 /* ARMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63C93184222CDB0E00DF5850 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63C93186222CDB0E00DF5850 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -36,7 +36,6 @@
 		63C93192222CDB0E00DF5850 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63C9319A222CE8A600DF5850 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		63C9319C222D9F8D00DF5850 /* ExtensioToCoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensioToCoreLocation.swift; sourceTree = "<group>"; };
-		63C931A0222E26B900DF5850 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Node.swift; path = /Users/david/Desktop/ARMap/ARMap/ARMap/Node.swift; sourceTree = "<absolute>"; };
 		63C931A2222F40F900DF5850 /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		63C931A4222F7ACD00DF5850 /* MapExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapExtension.swift; sourceTree = "<group>"; };
 		63C931A8222F804A00DF5850 /* MapAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotation.swift; sourceTree = "<group>"; };
@@ -46,6 +45,7 @@
 		933B996FF214E312FF15AAE3 /* Pods_ARMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.release.xcconfig"; path = "Target Support Files/Pods-ARMap/Pods-ARMap.release.xcconfig"; sourceTree = "<group>"; };
 		BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.debug.xcconfig"; path = "Target Support Files/Pods-ARMap/Pods-ARMap.debug.xcconfig"; sourceTree = "<group>"; };
+		D85BD4AFAED341D564EC397E /* Pods-ARMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARMap/Pods-ARMap.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +66,8 @@
 			children = (
 				BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */,
 				961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */,
+				5C2B0E28D766C80006A0CF1D /* Pods-ARMap.debug.xcconfig */,
+				D85BD4AFAED341D564EC397E /* Pods-ARMap.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -97,7 +99,6 @@
 				63C931B2222F960200DF5850 /* MapViiewController.swift */,
 				63C931AA222F909C00DF5850 /* LocationInfo.swift */,
 				63C931A2222F40F900DF5850 /* Matrix.swift */,
-				63C931A0222E26B900DF5850 /* Node.swift */,
 				63C931B0222F948E00DF5850 /* Node.swift */,
 				63C931A4222F7ACD00DF5850 /* MapExtension.swift */,
 				63C931A8222F804A00DF5850 /* MapAnnotation.swift */,
@@ -224,7 +225,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SCNPath/SCNPath.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -235,7 +236,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -246,7 +247,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				63C93189222CDB0E00DF5850 /* ViewController.swift in Sources */,
-				63C931A1222E26B900DF5850 /* Node.swift in Sources */,
 				63C931A9222F804A00DF5850 /* MapAnnotation.swift in Sources */,
 				63C931B1222F948E00DF5850 /* Node.swift in Sources */,
 				63C931AB222F909C00DF5850 /* LocationInfo.swift in Sources */,
@@ -402,13 +402,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3GLSZRZ9TE;
+				DEVELOPMENT_TEAM = CJ99886F8U;
 				INFOPLIST_FILE = ARMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dfservices.ARMap;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vanluu.ARMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -421,13 +421,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3GLSZRZ9TE;
+				DEVELOPMENT_TEAM = CJ99886F8U;
 				INFOPLIST_FILE = ARMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dfservices.ARMap;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vanluu.ARMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

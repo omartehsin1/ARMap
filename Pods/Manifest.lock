@@ -1,0 +1,16 @@
+PODS:
+  - SCNPath (1.0.0)
+
+DEPENDENCIES:
+  - SCNPath
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SCNPath
+
+SPEC CHECKSUMS:
+  SCNPath: 6411e93e6358bc020e306df192075f24198f6a7c
+
+PODFILE CHECKSUM: de097f076eb3fb06a1efa87063a348e1cf473611
+
+COCOAPODS: 1.5.3
