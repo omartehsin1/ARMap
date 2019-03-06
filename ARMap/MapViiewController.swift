@@ -11,6 +11,9 @@ import MapKit
 import CoreLocation
 import ARKit
 
+protocol HandleMapSearch {
+    func dropPinZoomIn(placemark:MKPlacemark)
+}
 
 class MapViiewController: UIViewController {
 
@@ -41,6 +44,13 @@ class MapViiewController: UIViewController {
         
         //Center the map.
         centerMapOnLocation(location: currentCoordinate.coordinate)
+        
+        
+        checkLocationServices()
+        let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! LocationSearchTable
+        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
+        resultSearchController?.searchResultsUpdater = locationSearchTable
+        
         
     }
     
