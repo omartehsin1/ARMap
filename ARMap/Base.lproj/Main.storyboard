@@ -89,9 +89,19 @@
                                     <action selector="backBtn:" destination="BV1-FR-VrT" eventType="touchUpInside" id="dKo-PM-mb2"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aJQ-iK-KRU">
-                                <rect key="frame" x="16" y="677" width="32" height="39"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qTC-8r-wud">
+                                <rect key="frame" x="295" y="580" width="119" height="156"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="qTC-8r-wud" secondAttribute="height" multiplier="119:156" id="6Rx-Fw-CkJ"/>
+                                    <constraint firstAttribute="width" constant="119" id="oeb-QV-bIB"/>
+                                </constraints>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aJQ-iK-KRU">
+                                <rect key="frame" x="5" y="680" width="55" height="51"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="55" id="Nec-Xd-8oy"/>
+                                    <constraint firstAttribute="width" secondItem="aJQ-iK-KRU" secondAttribute="height" multiplier="55:51" id="jjp-ky-pti"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Go">
                                     <color key="titleColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -100,18 +110,13 @@
                                     <action selector="goBtn:" destination="BV1-FR-VrT" eventType="touchUpInside" id="9bO-pL-Cuv"/>
                                 </connections>
                             </button>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qTC-8r-wud">
-                                <rect key="frame" x="295" y="580" width="119" height="156"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="qTC-8r-wud" secondAttribute="height" multiplier="119:156" id="6Rx-Fw-CkJ"/>
-                                    <constraint firstAttribute="width" constant="119" id="oeb-QV-bIB"/>
-                                </constraints>
-                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="qTC-8r-wud" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="BUP-nr-4f1"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
+                            <constraint firstItem="aJQ-iK-KRU" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" constant="5" id="UDP-sk-1j4"/>
+                            <constraint firstItem="fQZ-KI-GVf" firstAttribute="bottom" secondItem="aJQ-iK-KRU" secondAttribute="bottom" constant="5" id="UpF-aa-WRw"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
                             <constraint firstItem="qTC-8r-wud" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="iMA-IT-TN9"/>

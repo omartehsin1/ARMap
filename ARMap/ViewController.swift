@@ -43,6 +43,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
             }
         }
     }
+    private var pathPoints = [SCNVector3]() {
+        didSet{
+            self.pathNode.path = self.pathPoints
+        }
+    }
+    private var pathNode = SCNPathNode(path: [])
     
     
     //MARK: - LifeCycle
@@ -67,6 +73,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     }
     func setUpScene(){
         sceneView.delegate = self
+        //
+//        sceneView.frame = view.bounds
+        sceneView.automaticallyUpdatesLighting = true
+       // sceneView.autoresizingMask = [.flexibleWidth, .flexibleHeight ]
+        //view.addSubview(sceneView)
+        //
         let scene = SCNScene()
         sceneView.scene = scene
         runSession()
@@ -135,7 +147,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         }
         print("@2")
     }
-    
+    //Path
+    private func path(){
+        let pathMaterial = SCNMaterial()
+        pathMaterial.diffuse.contents = UIColor.blue
+        pathNode.materials = [pathMaterial]
+        pathNode.position.y += 0.05
+        pathNode.width = 1
+        sceneView.scene.rootNode.addChildNode(pathNode)
+        print("@A")
+    }
 
     //MARK: - Minimap crap
     private func showPointsOfInterestInMap(currentLegs: [[CLLocationCoordinate2D]]) {
@@ -176,7 +197,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         for pSteps in pathSteps {
             for step in pSteps {
                 mySteps.append(step)
-                //print("Coordinates for AR: \(step)")
+                print("Coordinates for AR: \(step)")
             }
         }
         for myStep in mySteps {
@@ -228,6 +249,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                     print("@7")
                     let translation = Matrix.transformMatrix(for: matrix_identity_float4x4, originLocation: myLocation, location: node.location)
                     let position = SCNVector3.positionForNode(transform: translation)
+                    //add vectors to path
+                    pathPoints.append(position)
                     let distance = node.location.distance(from: myLocation)
                     DispatchQueue.main.async {
                         let scale = 100 / Float(distance)
@@ -239,6 +262,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                 }
             }
             SCNTransaction.commit()
+            path()
         }
     }
 
