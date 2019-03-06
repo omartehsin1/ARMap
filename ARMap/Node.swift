@@ -21,10 +21,6 @@ class Node: SCNNode {
         self.location = location
         self.title = title
         super.init()
-        let facingCamConstrains = SCNBillboardConstraint()
-        facingCamConstrains.freeAxes = SCNBillboardAxis.Y
-        //?
-        constraints = [facingCamConstrains]
         
     }
     

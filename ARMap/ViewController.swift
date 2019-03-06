@@ -152,8 +152,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         let pathMaterial = SCNMaterial()
         pathMaterial.diffuse.contents = UIColor.blue
         pathNode.materials = [pathMaterial]
-        pathNode.position.y += 0.05
-        pathNode.width = 1
+        pathNode.position.y = -5
+        pathNode.position.y -= 0.5
+        pathNode.width = 2
         sceneView.scene.rootNode.addChildNode(pathNode)
         print("@A")
     }

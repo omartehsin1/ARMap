@@ -15,7 +15,6 @@
 		63C93191222CDB0E00DF5850 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63C9318F222CDB0E00DF5850 /* LaunchScreen.storyboard */; };
 		63C9319B222CE8A600DF5850 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C9319A222CE8A600DF5850 /* MapKit.framework */; };
 		63C9319D222D9F8D00DF5850 /* ExtensioToCoreLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C9319C222D9F8D00DF5850 /* ExtensioToCoreLocation.swift */; };
-		63C931A1222E26B900DF5850 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A0222E26B900DF5850 /* Node.swift */; };
 		63C931A3222F40F900DF5850 /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A2222F40F900DF5850 /* Matrix.swift */; };
 		63C931A5222F7ACD00DF5850 /* MapExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A4222F7ACD00DF5850 /* MapExtension.swift */; };
 		63C931A9222F804A00DF5850 /* MapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C931A8222F804A00DF5850 /* MapAnnotation.swift */; };
@@ -36,7 +35,6 @@
 		63C93192222CDB0E00DF5850 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63C9319A222CE8A600DF5850 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		63C9319C222D9F8D00DF5850 /* ExtensioToCoreLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensioToCoreLocation.swift; sourceTree = "<group>"; };
-		63C931A0222E26B900DF5850 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Node.swift; path = /Users/david/Desktop/ARMap/ARMap/ARMap/Node.swift; sourceTree = "<absolute>"; };
 		63C931A2222F40F900DF5850 /* Matrix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		63C931A4222F7ACD00DF5850 /* MapExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapExtension.swift; sourceTree = "<group>"; };
 		63C931A8222F804A00DF5850 /* MapAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotation.swift; sourceTree = "<group>"; };
@@ -97,7 +95,6 @@
 				63C931B2222F960200DF5850 /* MapViiewController.swift */,
 				63C931AA222F909C00DF5850 /* LocationInfo.swift */,
 				63C931A2222F40F900DF5850 /* Matrix.swift */,
-				63C931A0222E26B900DF5850 /* Node.swift */,
 				63C931B0222F948E00DF5850 /* Node.swift */,
 				63C931A4222F7ACD00DF5850 /* MapExtension.swift */,
 				63C931A8222F804A00DF5850 /* MapAnnotation.swift */,
@@ -246,7 +243,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				63C93189222CDB0E00DF5850 /* ViewController.swift in Sources */,
-				63C931A1222E26B900DF5850 /* Node.swift in Sources */,
 				63C931A9222F804A00DF5850 /* MapAnnotation.swift in Sources */,
 				63C931B1222F948E00DF5850 /* Node.swift in Sources */,
 				63C931AB222F909C00DF5850 /* LocationInfo.swift in Sources */,
