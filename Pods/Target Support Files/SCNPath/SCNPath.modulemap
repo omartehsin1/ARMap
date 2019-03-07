@@ -1,6 +1,0 @@
-framework module SCNPath {
-  umbrella header "SCNPath-umbrella.h"
-
-  export *
-  module * { export * }
-}
