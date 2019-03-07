@@ -30,8 +30,8 @@ class Node: SCNNode {
     }
     
     func makeBox(with size: CGFloat, color: UIColor)-> SCNNode{
-        let geometry = SCNBox(width: size, height: size, length: size, chamferRadius: 0)
-        geometry.firstMaterial?.diffuse.contents = color
+        let geometry = SCNBox(width: size, height: size, length: size, chamferRadius: 0.5)
+        geometry.firstMaterial?.diffuse.contents = UIImage(named: "art.scnassets/8k_sun.jpg")
         let cube = SCNNode(geometry: geometry)
         return cube
     }
@@ -39,8 +39,11 @@ class Node: SCNNode {
     func addNode(with size: CGFloat, and color: UIColor, and text: String){
         let cubeNode = makeBox(with: size, color: color)
         let stepText = SCNText(string: text, extrusionDepth: 0.05)
-        stepText.font = UIFont(name: "AvenirNext-Medium", size: 0.5)
-        stepText.firstMaterial?.diffuse.contents = UIColor.blue
+//        let billboardConstraint = SCNBillboardConstraint()
+//        billboardConstraint.freeAxes = SCNBillboardAxis.Y
+//        constraints = [billboardConstraint]
+        stepText.font = UIFont(name: "AvenirNext-Medium", size: 0.3)
+        stepText.firstMaterial?.diffuse.contents = UIColor.white
         let textNode = SCNNode(geometry: stepText)
         let annotationNode = SCNNode()
         annotationNode.addChildNode(textNode)

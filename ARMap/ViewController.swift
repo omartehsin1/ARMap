@@ -99,6 +99,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     
     func runSession(){
      let configuration = ARWorldTrackingConfiguration()
+        configuration.environmentTexturing = .automatic
         configuration.worldAlignment = .gravityAndHeading
         sceneView.session.run(configuration, options: [.resetTracking])
     }
@@ -154,11 +155,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     //Path
     private func path(){
         let pathMaterial = SCNMaterial()
-        pathMaterial.diffuse.contents = UIColor.blue
+        pathMaterial.diffuse.contents = UIImage(named: "art.scnassets/8k_earth_daymap.jpg")
         pathNode.materials = [pathMaterial]
         pathNode.position.y = -7
 //        pathNode.position.y -= 0.5
-        pathNode.width = 2
+        pathNode.width = 4
         sceneView.scene.rootNode.addChildNode(pathNode)
         print("@A")
     }
@@ -217,7 +218,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         let stepAnchor = ARAnchor(transform: locationTransform)
         let cube = Node(title: nil, location: location)
         anchors.append(stepAnchor)
-        cube.addCube(with: 0.1, and: .green)
+        cube.addCube(with: 0.04, and: .clear)
         cube.location = location
         cube.anchor = stepAnchor
         //add node to scene
@@ -233,7 +234,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         let stepAnchor = ARAnchor(transform: locationTransform)
         let cube = Node(title: step.instructions, location: stepLocation)
         anchors.append(stepAnchor)
-        cube.addNode(with: 0.1, and: .yellow, and: step.instructions)
+        cube.addNode(with: 0.05, and: .clear, and: step.instructions)
         cube.location = stepLocation
         cube.anchor = stepAnchor
         //add node to scene
