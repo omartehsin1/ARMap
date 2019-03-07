@@ -31,7 +31,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     private var updateLocations = [CLLocation]()
     private var currentPathPart = [[CLLocationCoordinate2D]]()
     private var done = false
-    internal var mapAnnotations = [MapAnnotation]()
+    private var mapAnnotations = [MapAnnotation]()
     private var annotationColor = UIColor.blue
     let locationManager = CLLocationManager()
     let regionRadius: CLLocationDistance = 800
@@ -119,8 +119,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     
     @IBAction func goBtn(_ sender: UIButton) {
         //
-        done = true
-        //
+        if !pathSteps.isEmpty{
+          done = true
+        }
+        
         trackingLocation(for: myLocation)
         updateNodes = true
         if updateLocations.count > 0 {
@@ -154,8 +156,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         let pathMaterial = SCNMaterial()
         pathMaterial.diffuse.contents = UIColor.blue
         pathNode.materials = [pathMaterial]
-        pathNode.position.y = -5
-        pathNode.position.y -= 0.5
+        pathNode.position.y = -7
+//        pathNode.position.y -= 0.5
         pathNode.width = 2
         sceneView.scene.rootNode.addChildNode(pathNode)
         print("@A")
@@ -165,9 +167,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     private func showPointsOfInterestInMap(currentLegs: [[CLLocationCoordinate2D]]) {
         for leg in currentLegs {
             for item in leg {
-                let mapAnnotation = MapAnnotation(coordinate: item, name: String(describing:item))
-                self.mapAnnotations.append(mapAnnotation)
-                self.mapView.addAnnotation(mapAnnotation)
+                let annotation = MapAnnotation(coordinate: item, name: String(describing:item))
+                mapAnnotations.append(annotation)
+                mapView.addAnnotation(annotation)
             }
         }
     }
@@ -178,9 +180,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     }
     
     //adds anotations and overlay to minimap
+    
     private func addAnnotations(){
-        guard let map = mapView else {return}
-        map.addOverlay(myRoute.polyline)
+        
         mapAnnotations.forEach { (annotation) in
             DispatchQueue.main.async {
                 if annotation.title != nil {
@@ -188,9 +190,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                 } else {
                     self.annotationColor = .yellow
                 }
-                print("@3")
-                map.addAnnotation(annotation)
-                map.addOverlay(MKCircle(center: annotation.coordinate, radius: 0.2))
+                print("@33333")
+                self.mapView.addAnnotation(annotation)
+                self.mapView.addOverlay(MKCircle(center: annotation.coordinate, radius: 0.2))
             }
         }
     }
@@ -281,6 +283,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
             SCNTransaction.commit()
             path()
         }
+        mapView.addOverlay(myRoute.polyline)
     }
 
     
@@ -311,4 +314,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+}
+
+extension ViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        //Display line on 2D map
+        if overlay is MKPolyline {
+            let renderer = MKPolylineRenderer(overlay: overlay)
+            renderer.strokeColor = .blue
+            renderer.lineWidth = 4
+            return renderer
+        }
+        return MKOverlayRenderer()
+    }
+    
+    
 }
