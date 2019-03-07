@@ -49,6 +49,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         }
     }
     private var pathNode = SCNPathNode(path: [])
+    private var pathNodes = [Node]()
     
     
     //MARK: - LifeCycle
@@ -69,6 +70,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Pause the view's session
+        
         sceneView.session.pause()
     }
     func setUpScene(){
@@ -236,6 +238,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         sceneView.session.add(anchor: stepAnchor)
         sceneView.scene.rootNode.addChildNode(cube)
         nodes.append(cube)
+        pathNodes.append(cube)
         print("@5")
     }
     
@@ -250,8 +253,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                     print("@7")
                     let translation = Matrix.transformMatrix(for: matrix_identity_float4x4, originLocation: myLocation, location: node.location)
                     let position = SCNVector3.positionForNode(transform: translation)
-                    //add vectors to path
-                    pathPoints.append(position)
                     let distance = node.location.distance(from: myLocation)
                     DispatchQueue.main.async {
                         let scale = 100 / Float(distance)
@@ -260,6 +261,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                         node.anchor = ARAnchor(transform: translation)
                         print("@8")
                     }
+                }
+                for pathN in pathNodes {
+                    print("@9")
+                    let translation = Matrix.transformMatrix(for: matrix_identity_float4x4, originLocation: myLocation, location: pathN.location)
+                    let position = SCNVector3.positionForNode(transform: translation)
+                    let distance = pathN.location.distance(from: myLocation)
+                    DispatchQueue.main.async {
+                        let scale = 100 / Float(distance)
+                        pathN.scale = SCNVector3(x: scale, y: scale, z: scale)
+                        pathN.position = position
+                        pathN.anchor = ARAnchor(transform: translation)
+                        print("@10")
+                    }
+                    //add vectors to path
+                    pathPoints.append(position)
                 }
             }
             SCNTransaction.commit()
