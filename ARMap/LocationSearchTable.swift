@@ -11,6 +11,7 @@ import MapKit
 
 class LocationSearchTable : UITableViewController {
     var matchingItems:[MKMapItem] = []
+    var overLayItems:[MKOverlayRenderer] = []
     var mapView: MKMapView? = nil
     var handleMapSearchDelegate:HandleMapSearch? = nil
     
@@ -53,6 +54,7 @@ extension LocationSearchTable : UISearchResultsUpdating {
                 return
             }
             self.matchingItems = response.mapItems
+            
             self.tableView.reloadData()
         })
     }
@@ -76,7 +78,9 @@ extension LocationSearchTable {
 extension LocationSearchTable {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedItem = matchingItems[indexPath.row].placemark
+        //let selectedOverlay = overLayItems[indexPath.row].overlay
         handleMapSearchDelegate?.dropPinZoomIn(placemark: selectedItem)
+        handleMapSearchDelegate?.createDirectionToDestintation(destCoordinates: selectedItem.coordinate)
         dismiss(animated: true, completion: nil)
     }
 }

@@ -13,14 +13,15 @@ import ARKit
 
 protocol HandleMapSearch {
     func dropPinZoomIn(placemark:MKPlacemark)
+    func createDirectionToDestintation(destCoordinates: CLLocationCoordinate2D)
 }
 
 class MapViiewController: UIViewController {
-
+    @IBOutlet var searchBarMap: UISearchBar!
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var searchBar: UISearchBar!
+ 
     
-    let regionRadius: CLLocationDistance = 800
+    let regionRadius: CLLocationDistance = 10000
     let initialLocation = CLLocation(latitude: 43.717055, longitude: -79.330083)
     
     let locationManager = CLLocationManager()
@@ -30,6 +31,14 @@ class MapViiewController: UIViewController {
     private var polylines = [MKPolyline]()
     private var route = MKRoute()
     private var currentPathPart = [[CLLocationCoordinate2D]]()
+    
+    var directionsArray: [MKDirections] = []
+    var resultSearchController : UISearchController? = nil
+    
+    var selectedPin:MKPlacemark? = nil
+    var selectedOverlay : MKOverlayRenderer? = nil
+    
+    var locationSearchTableVC : LocationSearchTable?
     
     
     override func viewDidLoad() {
@@ -45,11 +54,25 @@ class MapViiewController: UIViewController {
         //Center the map.
         centerMapOnLocation(location: currentCoordinate.coordinate)
         
-        
-        checkLocationServices()
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! LocationSearchTable
         resultSearchController = UISearchController(searchResultsController: locationSearchTable)
         resultSearchController?.searchResultsUpdater = locationSearchTable
+        locationSearchTableVC = locationSearchTable
+        
+        
+        let searchBar = resultSearchController!.searchBar
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Search for places"
+        searchBar.delegate = self
+        navigationItem.titleView = resultSearchController?.searchBar
+        //searchBarMap = searchBar
+        
+        resultSearchController?.hidesNavigationBarDuringPresentation = false
+        resultSearchController?.dimsBackgroundDuringPresentation = true
+        definesPresentationContext = true
+        locationSearchTable.mapView = mapView
+        
+        locationSearchTable.handleMapSearchDelegate = self
         
         
     }
@@ -59,7 +82,7 @@ class MapViiewController: UIViewController {
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
-    func getDirection(to destination: MKMapItem){
+    @objc func getDirection(to destination: MKMapItem){
         let sourcePlaceMark = MKPlacemark(coordinate: currentCoordinate.coordinate)
         let sourceMapItem = MKMapItem(placemark: sourcePlaceMark)
         
@@ -68,6 +91,7 @@ class MapViiewController: UIViewController {
         directionRequest.destination = destination
         directionRequest.transportType = .walking
         
+        //selectedPin = sourcePlaceMark
         let directions = MKDirections(request: directionRequest)
         directions.calculate { (response, error) in
             if error != nil {
@@ -88,6 +112,7 @@ class MapViiewController: UIViewController {
                 //self.steps = primaryRoute.steps
                 self.getLocation()
             }
+            
         }
     }
     
@@ -144,6 +169,13 @@ class MapViiewController: UIViewController {
 //        }
     }
 
+    
+    func resetMapView(withNew directions: MKDirections) {
+        mapView.removeOverlays(mapView.overlays)
+        directionsArray.append(directions)
+        let _ = directionsArray.map { $0.cancel() }
+    }
+
 }
 
 extension MapViiewController: CLLocationManagerDelegate{
@@ -158,24 +190,26 @@ extension MapViiewController: CLLocationManagerDelegate{
 }
 
 extension MapViiewController: UISearchBarDelegate {
-    //get results from searchbar
+//    //get results from searchbar
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.endEditing(true)
-        let localSearchRequest = MKLocalSearch.Request()
-        localSearchRequest.naturalLanguageQuery = searchBar.text
-        let region = MKCoordinateRegion(center: currentCoordinate.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
-        localSearchRequest.region = region
-        let localSearch = MKLocalSearch(request: localSearchRequest)
-        localSearch.start { (response, error) in
-            if error != nil {
-                print("Error1: \(String(describing: error))")
-            } else {
-                guard let response = response else {return}
-                guard let firstMapItem = response.mapItems.first else {return}
-                print("First Imet: \(firstMapItem)")
-                self.getDirection(to: firstMapItem)
-            }
-        }
+//        searchBar.endEditing(true)
+//        let localSearchRequest = MKLocalSearch.Request()
+//        localSearchRequest.naturalLanguageQuery = searchBar.text
+//        let region = MKCoordinateRegion(center: currentCoordinate.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
+//        localSearchRequest.region = region
+//        let localSearch = MKLocalSearch(request: localSearchRequest)
+//        localSearch.start { (response, error) in
+//            if error != nil {
+//                print("Error1: \(String(describing: error))")
+//            } else {
+//                guard let response = response else {return}
+//                guard let firstMapItem = response.mapItems.first else {return}
+//                print("First Imet: \(firstMapItem)")
+//                self.getDirection(to: firstMapItem)
+//            }
+//        }
+        
+        
     }
 }
 
@@ -186,10 +220,98 @@ extension MapViiewController: MKMapViewDelegate {
             let renderer = MKPolylineRenderer(overlay: overlay)
             renderer.strokeColor = .blue
             renderer.lineWidth = 4
+            
             return renderer
         }
         return MKOverlayRenderer()
     }
     
+//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+//        let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
+//        renderer.strokeColor = .blue
+//        renderer.lineWidth = 4
+//
+//        return renderer
+//
+//
+//    }
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?{
+        if annotation is MKUserLocation {
+            //return nil so map view draws "blue dot" for standard user location
+            return nil
+        }
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+        pinView?.pinTintColor = UIColor.orange
+        pinView?.canShowCallout = true
+        let smallSquare = CGSize(width: 30, height: 30)
+        let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: smallSquare))
+        //button.setBackgroundImage(UIImage(named: "car"), forState: .Normal)
+        
+        button.addTarget(self, action: #selector(MapViiewController.getDirection(to:)), for: .touchUpInside)
+        pinView?.leftCalloutAccessoryView = button
+        return pinView
+    }
     
+    
+}
+
+extension MapViiewController: HandleMapSearch {
+    func createDirectionToDestintation(destCoordinates: CLLocationCoordinate2D) {
+        
+        guard let sourceCoordinates = locationManager.location?.coordinate else {
+            return
+        }
+        let sourcePlacemark = MKPlacemark(coordinate: sourceCoordinates)
+        let destPlacemark = MKPlacemark(coordinate: destCoordinates)
+        
+        let sourceItem = MKMapItem(placemark: sourcePlacemark)
+        let destItem = MKMapItem(placemark: destPlacemark)
+        
+        let directionRequest = MKDirections.Request()
+        directionRequest.source = sourceItem
+        directionRequest.destination = destItem
+        directionRequest.transportType = .walking
+        
+        let directions = MKDirections(request: directionRequest)
+        directions.calculate { (response: MKDirections.Response?, error: Error?) in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            
+            let route = response?.routes[0]
+            guard let directionRoute = route?.polyline else {return}
+            self.mapView.addOverlay(directionRoute, level: .aboveRoads)
+            
+            guard let rect = route?.polyline.boundingMapRect else {return}
+            self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+        }
+    }
+    
+
+    
+
+    
+    func dropPinZoomIn(placemark:MKPlacemark){
+        // cache the pin
+        selectedPin = placemark
+        // clear existing pins
+        
+        mapView.removeAnnotations(mapView.annotations)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = placemark.coordinate
+        annotation.title = placemark.name
+        if let city = placemark.locality,
+            let state = placemark.administrativeArea {
+            annotation.subtitle = "(Toronto) (ON)"
+        }
+        mapView.addAnnotation(annotation)
+        let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
+        mapView.setRegion(region, animated: true)
+        
+        
+    }
 }
