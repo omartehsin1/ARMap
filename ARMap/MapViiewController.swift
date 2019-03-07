@@ -81,8 +81,20 @@ class MapViiewController: UIViewController {
         let coordinateRegion = MKCoordinateRegion.init(center: location, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
+    override func viewWillAppear(_ animated: Bool) {
+       clearData()
+    }
+    
+    func clearData(){
+        // Clears the variables
+        steps = []
+        mapView.removeOverlay(route.polyline)
+        route = MKRoute()
+        currentPathPart = [[]]
+    }
     
     @objc func getDirection(to destination: MKMapItem){
+        clearData()
         let sourcePlaceMark = MKPlacemark(coordinate: currentCoordinate.coordinate)
         let sourceMapItem = MKMapItem(placemark: sourcePlaceMark)
         

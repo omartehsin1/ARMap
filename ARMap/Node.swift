@@ -21,10 +21,6 @@ class Node: SCNNode {
         self.location = location
         self.title = title
         super.init()
-        let facingCamConstrains = SCNBillboardConstraint()
-        facingCamConstrains.freeAxes = SCNBillboardAxis.Y
-        //?
-        constraints = [facingCamConstrains]
         
     }
     
@@ -42,8 +38,8 @@ class Node: SCNNode {
     
     func addNode(with size: CGFloat, and color: UIColor, and text: String){
         let cubeNode = makeBox(with: size, color: color)
-        let stepText = SCNText(string: text, extrusionDepth: 0.1)
-        stepText.font = UIFont(name: "AvenirNext-Medium", size: 1)
+        let stepText = SCNText(string: text, extrusionDepth: 0.05)
+        stepText.font = UIFont(name: "AvenirNext-Medium", size: 0.5)
         stepText.firstMaterial?.diffuse.contents = UIColor.blue
         let textNode = SCNNode(geometry: stepText)
         let annotationNode = SCNNode()
