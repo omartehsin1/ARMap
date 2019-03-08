@@ -12,15 +12,11 @@ import MapKit
 final class MapAnnotation: NSObject, MKAnnotation {
     
     var coordinate: CLLocationCoordinate2D
+
     
-    var title: String?
-    
-    var subtitle: String?
-    
-    init(coordinate: CLLocationCoordinate2D, name: String) {
+    init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
-        self.title = name
-        self.subtitle =  "(\(coordinate.latitude),\(coordinate.longitude))"
+        
         super.init()
     }
 }

@@ -88,7 +88,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     
     func setUpNavigation(){
         locationManager.requestAlwaysAuthorization()
-        locationManager.delegate = self as? CLLocationManagerDelegate
+        locationManager.delegate = self 
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         //get current location
@@ -133,8 +133,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                     print("@1")
                     self.centerMapInInitialCoordinates()
                     self.addAnchors(steps: self.myRoute.steps)
-                    self.showPointsOfInterestInMap(currentLegs: self.currentPathPart)
                     self.addAnnotations()
+                   self.showPointsOfInterestInMap(currentPath: self.mySteps)
+                    
                 }
             }
         }
@@ -165,14 +166,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     }
 
     //MARK: - Minimap crap
-    private func showPointsOfInterestInMap(currentLegs: [[CLLocationCoordinate2D]]) {
-        for leg in currentLegs {
-            for item in leg {
-                let annotation = MapAnnotation(coordinate: item, name: String(describing:item))
-                mapAnnotations.append(annotation)
-                mapView.addAnnotation(annotation)
-            }
-        }
+    private func showPointsOfInterestInMap(currentPath: [CLLocationCoordinate2D]) {
+        guard let myAnnotation = currentPath.first else {return}
+        guard let destinationAnnotation = currentPath.last else {return}
+        let annotation = MapAnnotation(coordinate: myAnnotation)
+        let destiAnnotation = MapAnnotation(coordinate: destinationAnnotation)
+        self.mapView.addAnnotation(annotation)
+        self.mapView.addAnnotation(destiAnnotation)
     }
     
     func centerMapOnLocation(location: CLLocationCoordinate2D){
@@ -183,19 +183,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     //adds anotations and overlay to minimap
     
     private func addAnnotations(){
-        
-        mapAnnotations.forEach { (annotation) in
-            DispatchQueue.main.async {
-                if annotation.title != nil {
-                   self.annotationColor = .green
-                } else {
-                    self.annotationColor = .yellow
-                }
-                print("@33333")
-                self.mapView.addAnnotation(annotation)
-                self.mapView.addOverlay(MKCircle(center: annotation.coordinate, radius: 0.2))
-            }
-        }
+        mapView.addOverlay(myRoute.polyline)
+         mapView.addOverlay(myRoute.polyline)
+        mapView(mapView, rendererFor: myRoute.polyline)
     }
     
     //gets coordinates
@@ -316,8 +306,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         
     }
 }
-
-extension ViewController: MKMapViewDelegate {
+extension ViewController: MKMapViewDelegate, CLLocationManagerDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         //Display line on 2D map
         if overlay is MKPolyline {
@@ -328,6 +317,11 @@ extension ViewController: MKMapViewDelegate {
         }
         return MKOverlayRenderer()
     }
-    
-    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        manager.stopUpdatingLocation()
+        guard let currentLocation = locations.first else {return}
+        updateLocations.append(currentLocation) 
+        
+        mapView.userTrackingMode = .followWithHeading 
+    }
 }
