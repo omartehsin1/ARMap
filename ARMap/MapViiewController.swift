@@ -21,11 +21,10 @@ class MapViiewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
  
     
-    let regionRadius: CLLocationDistance = 1000
-    let initialLocation = CLLocation(latitude: 43.717055, longitude: -79.330083)
+    var regionRadius: CLLocationDistance = 400
     
     let locationManager = CLLocationManager()
-    var currentCoordinate = CLLocation(latitude: 43.717055, longitude: -79.330083)
+    var currentCoordinate = CLLocation()
     
     private var steps = [MKRoute.Step]()
     private var polylines = [MKPolyline]()
@@ -53,7 +52,7 @@ class MapViiewController: UIViewController {
         print("Current: \(currentCoordinate.coordinate)")
         
         //Center the map.
-        centerMapOnLocation(location: currentCoordinate.coordinate)
+        centerMapOnLocation(location: currentCoordinate.coordinate, distance: regionRadius)
         
         let locationSearchTable = storyboard!.instantiateViewController(withIdentifier: "LocationSearchTable") as! LocationSearchTable
         resultSearchController = UISearchController(searchResultsController: locationSearchTable)
@@ -74,16 +73,14 @@ class MapViiewController: UIViewController {
         locationSearchTable.mapView = mapView
         
         locationSearchTable.handleMapSearchDelegate = self
-        
-        
     }
     
-    func centerMapOnLocation(location: CLLocationCoordinate2D){
-        let coordinateRegion = MKCoordinateRegion.init(center: location, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+    func centerMapOnLocation(location: CLLocationCoordinate2D, distance: CLLocationDistance){
+        let coordinateRegion = MKCoordinateRegion.init(center: location, latitudinalMeters: distance, longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     override func viewWillAppear(_ animated: Bool) {
-       clearData()
+       
     }
     
     func clearData(){
@@ -260,12 +257,11 @@ extension MapViiewController: MKMapViewDelegate {
 
 extension MapViiewController: HandleMapSearch {
     func createDirectionToDestintation(destCoordinates: CLLocationCoordinate2D) {
-        
-        guard let sourceCoordinates = locationManager.location?.coordinate else {
-            return
-        }
         clearData()
-        let sourcePlacemark = MKPlacemark(coordinate: sourceCoordinates)
+        guard let myLocation = locationManager.location else {return}
+        currentCoordinate = myLocation
+        
+        let sourcePlacemark = MKPlacemark(coordinate: currentCoordinate.coordinate)
         let destPlacemark = MKPlacemark(coordinate: destCoordinates)
         
         let sourceItem = MKMapItem(placemark: sourcePlacemark)
@@ -284,6 +280,7 @@ extension MapViiewController: HandleMapSearch {
                 guard let response = response else {return}
                 guard let primaryRoute = response.routes.first else {return}
                 self.route = primaryRoute
+                let distance = primaryRoute.distance
                 print("Main Route Polyline : \(String(describing: primaryRoute.polyline.coordinate))")
                 //Add each MKRoute.step to array of MKRouteSteps.
                 for step in primaryRoute.steps {
@@ -293,8 +290,9 @@ extension MapViiewController: HandleMapSearch {
                 //Draw each line on 2d map
                 self.mapView.addOverlay(primaryRoute.polyline, level: .aboveRoads)
                 self.polylines = [primaryRoute.polyline]
-                let rect = primaryRoute.polyline.boundingMapRect
-                self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+                //let rect = primaryRoute.polyline.boundingMapRect
+                //self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+                self.centerMapOnLocation(location: self.currentCoordinate.coordinate, distance: (distance *  2))
                 //self.steps = primaryRoute.steps
                 self.getLocation()
             }
