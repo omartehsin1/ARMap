@@ -31,6 +31,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     private var updateLocations = [CLLocation]()
     private var currentPathPart = [[CLLocationCoordinate2D]]()
     private var done = false
+    private var mapAnnotations = [MapAnnotation]()
     private var annotationColor = UIColor.blue
     let locationManager = CLLocationManager()
     let regionRadius: CLLocationDistance = 800
@@ -48,6 +49,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         }
     }
     private var pathNode = SCNPathNode(path: [])
+    private var pathNodes = [Node]()
     
     
     //MARK: - LifeCycle
@@ -68,6 +70,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Pause the view's session
+        
         sceneView.session.pause()
     }
     func setUpScene(){
@@ -96,6 +99,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     
     func runSession(){
      let configuration = ARWorldTrackingConfiguration()
+        configuration.environmentTexturing = .automatic
         configuration.worldAlignment = .gravityAndHeading
         sceneView.session.run(configuration, options: [.resetTracking])
     }
@@ -116,8 +120,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     
     @IBAction func goBtn(_ sender: UIButton) {
         //
-        done = true
-        //
+        if !pathSteps.isEmpty{
+          done = true
+        }
+        
         trackingLocation(for: myLocation)
         updateNodes = true
         if updateLocations.count > 0 {
@@ -150,11 +156,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     //Path
     private func path(){
         let pathMaterial = SCNMaterial()
-        pathMaterial.diffuse.contents = UIColor.blue
+        pathMaterial.diffuse.contents = UIImage(named: "art.scnassets/8k_earth_daymap.jpg")
         pathNode.materials = [pathMaterial]
-        pathNode.position.y = -5
-        pathNode.position.y -= 0.5
-        pathNode.width = 2
+        pathNode.position.y = -7
+//        pathNode.position.y -= 0.5
+        pathNode.width = 4
         sceneView.scene.rootNode.addChildNode(pathNode)
         print("@A")
     }
@@ -175,6 +181,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     }
     
     //adds anotations and overlay to minimap
+    
     private func addAnnotations(){
         mapView.addOverlay(myRoute.polyline)
          mapView.addOverlay(myRoute.polyline)
@@ -201,7 +208,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         let stepAnchor = ARAnchor(transform: locationTransform)
         let cube = Node(title: nil, location: location)
         anchors.append(stepAnchor)
-        cube.addCube(with: 0.1, and: .green)
+        cube.addCube(with: 0.04, and: .clear)
         cube.location = location
         cube.anchor = stepAnchor
         //add node to scene
@@ -217,13 +224,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         let stepAnchor = ARAnchor(transform: locationTransform)
         let cube = Node(title: step.instructions, location: stepLocation)
         anchors.append(stepAnchor)
-        cube.addNode(with: 0.1, and: .yellow, and: step.instructions)
+        cube.addNode(with: 0.05, and: .clear, and: step.instructions)
         cube.location = stepLocation
         cube.anchor = stepAnchor
         //add node to scene
         sceneView.session.add(anchor: stepAnchor)
         sceneView.scene.rootNode.addChildNode(cube)
         nodes.append(cube)
+        pathNodes.append(cube)
         print("@5")
     }
     
@@ -238,8 +246,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                     print("@7")
                     let translation = Matrix.transformMatrix(for: matrix_identity_float4x4, originLocation: myLocation, location: node.location)
                     let position = SCNVector3.positionForNode(transform: translation)
-                    //add vectors to path
-                    pathPoints.append(position)
                     let distance = node.location.distance(from: myLocation)
                     DispatchQueue.main.async {
                         let scale = 100 / Float(distance)
@@ -249,10 +255,26 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                         print("@8")
                     }
                 }
+                for pathN in pathNodes {
+                    print("@9")
+                    let translation = Matrix.transformMatrix(for: matrix_identity_float4x4, originLocation: myLocation, location: pathN.location)
+                    let position = SCNVector3.positionForNode(transform: translation)
+                    let distance = pathN.location.distance(from: myLocation)
+                    DispatchQueue.main.async {
+                        let scale = 100 / Float(distance)
+                        pathN.scale = SCNVector3(x: scale, y: scale, z: scale)
+                        pathN.position = position
+                        pathN.anchor = ARAnchor(transform: translation)
+                        print("@10")
+                    }
+                    //add vectors to path
+                    pathPoints.append(position)
+                }
             }
             SCNTransaction.commit()
             path()
         }
+        mapView.addOverlay(myRoute.polyline)
     }
 
     
@@ -284,7 +306,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         
     }
 }
-
 extension ViewController: MKMapViewDelegate, CLLocationManagerDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         //Display line on 2D map
@@ -301,7 +322,6 @@ extension ViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         guard let currentLocation = locations.first else {return}
         updateLocations.append(currentLocation) 
         
-        mapView.userTrackingMode = .followWithHeading
-        
+        mapView.userTrackingMode = .followWithHeading 
     }
 }
