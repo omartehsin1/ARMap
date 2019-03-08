@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		630263BF223217C800B91231 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 630263BE223217C800B91231 /* art.scnassets */; };
 		0711678E22307BAD00C088E4 /* LocationSearchTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0711678D22307BAD00C088E4 /* LocationSearchTable.swift */; };
+		630263BF223217C800B91231 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 630263BE223217C800B91231 /* art.scnassets */; };
 		63C93185222CDB0E00DF5850 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C93184222CDB0E00DF5850 /* AppDelegate.swift */; };
 		63C93189222CDB0E00DF5850 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C93188222CDB0E00DF5850 /* ViewController.swift */; };
 		63C9318C222CDB0E00DF5850 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63C9318A222CDB0E00DF5850 /* Main.storyboard */; };
@@ -26,9 +26,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		630263BE223217C800B91231 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		0711678D22307BAD00C088E4 /* LocationSearchTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchTable.swift; sourceTree = "<group>"; };
-		5C2B0E28D766C80006A0CF1D /* Pods-ARMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ARMap/Pods-ARMap.debug.xcconfig"; sourceTree = "<group>"; };
+		630263BE223217C800B91231 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		63C93181222CDB0E00DF5850 /* ARMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63C93184222CDB0E00DF5850 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63C93188222CDB0E00DF5850 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,7 +46,6 @@
 		933B996FF214E312FF15AAE3 /* Pods_ARMap.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARMap.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.release.xcconfig"; path = "Target Support Files/Pods-ARMap/Pods-ARMap.release.xcconfig"; sourceTree = "<group>"; };
 		BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.debug.xcconfig"; path = "Target Support Files/Pods-ARMap/Pods-ARMap.debug.xcconfig"; sourceTree = "<group>"; };
-		D85BD4AFAED341D564EC397E /* Pods-ARMap.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARMap.release.xcconfig"; path = "Pods/Target Support Files/Pods-ARMap/Pods-ARMap.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +66,6 @@
 			children = (
 				BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */,
 				961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */,
-				5C2B0E28D766C80006A0CF1D /* Pods-ARMap.debug.xcconfig */,
-				D85BD4AFAED341D564EC397E /* Pods-ARMap.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -406,7 +402,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CJ99886F8U;
+				DEVELOPMENT_TEAM = 3GLSZRZ9TE;
 				INFOPLIST_FILE = ARMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -425,7 +421,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CJ99886F8U;
+				DEVELOPMENT_TEAM = 3GLSZRZ9TE;
 				INFOPLIST_FILE = ARMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

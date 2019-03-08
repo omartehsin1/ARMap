@@ -312,7 +312,7 @@ extension ViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         if overlay is MKPolyline {
             let renderer = MKPolylineRenderer(overlay: overlay)
             renderer.strokeColor = .blue
-            renderer.lineWidth = 4
+            renderer.lineWidth = 3
             return renderer
         }
         return MKOverlayRenderer()

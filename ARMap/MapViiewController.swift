@@ -21,7 +21,7 @@ class MapViiewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
  
     
-    let regionRadius: CLLocationDistance = 10000
+    let regionRadius: CLLocationDistance = 1000
     let initialLocation = CLLocation(latitude: 43.717055, longitude: -79.330083)
     
     let locationManager = CLLocationManager()
@@ -31,6 +31,7 @@ class MapViiewController: UIViewController {
     private var polylines = [MKPolyline]()
     private var route = MKRoute()
     private var currentPathPart = [[CLLocationCoordinate2D]]()
+    private var pathIndicators = [[CLLocationCoordinate2D]]()
     
     var directionsArray: [MKDirections] = []
     var resultSearchController : UISearchController? = nil
@@ -93,40 +94,39 @@ class MapViiewController: UIViewController {
         currentPathPart = [[]]
     }
     
-    @objc func getDirection(to destination: MKMapItem){
-        clearData()
-        let sourcePlaceMark = MKPlacemark(coordinate: currentCoordinate.coordinate)
-        let sourceMapItem = MKMapItem(placemark: sourcePlaceMark)
-        
-        let directionRequest = MKDirections.Request()
-        directionRequest.source = sourceMapItem
-        directionRequest.destination = destination
-        directionRequest.transportType = .walking
-        
-        //selectedPin = sourcePlaceMark
-        let directions = MKDirections(request: directionRequest)
-        directions.calculate { (response, error) in
-            if error != nil {
-                print("Error2: \(String(describing: error))")
-            } else {
-                guard let response = response else {return}
-                guard let primaryRoute = response.routes.first else {return}
-                self.route = primaryRoute
-                print("Main Route Polyline : \(String(describing: primaryRoute.polyline.coordinate))")
-                //Add each MKRoute.step to array of MKRouteSteps.
-                for step in primaryRoute.steps {
-                   print(step.polyline.coordinate)
-                    self.steps.append(step)
-                }
-                //Draw each line on 2d map
-                self.mapView.addOverlay(primaryRoute.polyline)
-                self.polylines = [primaryRoute.polyline]
-                //self.steps = primaryRoute.steps
-                self.getLocation()
-            }
-            
-        }
-    }
+//    @objc func getDirection(to destination: MKMapItem){
+//        clearData()
+//        let sourcePlaceMark = MKPlacemark(coordinate: currentCoordinate.coordinate)
+//        let sourceMapItem = MKMapItem(placemark: sourcePlaceMark)
+//
+//        let directionRequest = MKDirections.Request()
+//        directionRequest.source = sourceMapItem
+//        directionRequest.destination = destination
+//        directionRequest.transportType = .walking
+//
+//        //selectedPin = sourcePlaceMark
+//        let directions = MKDirections(request: directionRequest)
+//        directions.calculate { (response, error) in
+//            if error != nil {
+//                print("Error2: \(String(describing: error))")
+//            } else {
+//                guard let response = response else {return}
+//                guard let primaryRoute = response.routes.first else {return}
+//                self.route = primaryRoute
+//                print("Main Route Polyline : \(String(describing: primaryRoute.polyline.coordinate))")
+//                //Add each MKRoute.step to array of MKRouteSteps.
+//                for step in primaryRoute.steps {
+//                   print(step.polyline.coordinate)
+//                    self.steps.append(step)
+//                }
+//                //Draw each line on 2d map
+//                self.mapView.addOverlay(primaryRoute.polyline)
+//                self.polylines = [primaryRoute.polyline]
+//                //self.steps = primaryRoute.steps
+//                self.getLocation()
+//            }
+//        }
+//    }
     
      private func getLocation() {
         for (index, step) in steps.enumerated() {
@@ -160,9 +160,9 @@ class MapViiewController: UIViewController {
     private func getFirstPath(for pathStep: MKRoute.Step){
         let nextLocation = CLLocation(latitude: pathStep.polyline.coordinate.latitude, longitude: pathStep.polyline.coordinate.longitude)
         let middleSteps = CLLocationCoordinate2D.getPathLocations(currentLocation: currentCoordinate, nextLocation: nextLocation)
-        currentPathPart.append(middleSteps)
+        pathIndicators.append(middleSteps)
         for step in middleSteps {
-            print("Middle steps: \(step.latitude), \(step.longitude)")
+            print("Main steps: \(step.latitude), \(step.longitude)")
         }
     }
 
@@ -195,9 +195,7 @@ extension MapViiewController: CLLocationManagerDelegate{
     manager.stopUpdatingLocation()
         guard let currentLocation = locations.first else {return}
         currentCoordinate = currentLocation
-        
         mapView.userTrackingMode = .followWithHeading
-        
     }
 }
 
@@ -231,22 +229,13 @@ extension MapViiewController: MKMapViewDelegate {
         if overlay is MKPolyline {
             let renderer = MKPolylineRenderer(overlay: overlay)
             renderer.strokeColor = .blue
-            renderer.lineWidth = 4
+            renderer.lineWidth = 3
             
             return renderer
         }
         return MKOverlayRenderer()
     }
     
-//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-//        let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
-//        renderer.strokeColor = .blue
-//        renderer.lineWidth = 4
-//
-//        return renderer
-//
-//
-//    }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?{
         if annotation is MKUserLocation {
             //return nil so map view draws "blue dot" for standard user location
@@ -261,7 +250,7 @@ extension MapViiewController: MKMapViewDelegate {
         let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: smallSquare))
         //button.setBackgroundImage(UIImage(named: "car"), forState: .Normal)
         
-        button.addTarget(self, action: #selector(MapViiewController.getDirection(to:)), for: .touchUpInside)
+        //button.addTarget(self, action: #selector(MapViiewController.getDirection(to:)), for: .touchUpInside)
         pinView?.leftCalloutAccessoryView = button
         return pinView
     }
@@ -275,6 +264,7 @@ extension MapViiewController: HandleMapSearch {
         guard let sourceCoordinates = locationManager.location?.coordinate else {
             return
         }
+        clearData()
         let sourcePlacemark = MKPlacemark(coordinate: sourceCoordinates)
         let destPlacemark = MKPlacemark(coordinate: destCoordinates)
         
@@ -287,23 +277,29 @@ extension MapViiewController: HandleMapSearch {
         directionRequest.transportType = .walking
         
         let directions = MKDirections(request: directionRequest)
-        directions.calculate { (response: MKDirections.Response?, error: Error?) in
-            if let error = error {
-                print(error.localizedDescription)
+        directions.calculate { (response, error) in
+            if error != nil {
+                print("Error2: \(String(describing: error))")
+            } else {
+                guard let response = response else {return}
+                guard let primaryRoute = response.routes.first else {return}
+                self.route = primaryRoute
+                print("Main Route Polyline : \(String(describing: primaryRoute.polyline.coordinate))")
+                //Add each MKRoute.step to array of MKRouteSteps.
+                for step in primaryRoute.steps {
+                    print(step.polyline.coordinate)
+                    self.steps.append(step)
+                }
+                //Draw each line on 2d map
+                self.mapView.addOverlay(primaryRoute.polyline, level: .aboveRoads)
+                self.polylines = [primaryRoute.polyline]
+                let rect = primaryRoute.polyline.boundingMapRect
+                self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+                //self.steps = primaryRoute.steps
+                self.getLocation()
             }
-            
-            let route = response?.routes[0]
-            guard let directionRoute = route?.polyline else {return}
-            self.mapView.addOverlay(directionRoute, level: .aboveRoads)
-            
-            guard let rect = route?.polyline.boundingMapRect else {return}
-            self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
         }
     }
-    
-
-    
-
     
     func dropPinZoomIn(placemark:MKPlacemark){
         // cache the pin
@@ -323,7 +319,5 @@ extension MapViiewController: HandleMapSearch {
         let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
         let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
         mapView.setRegion(region, animated: true)
-        
-        
     }
 }
