@@ -228,7 +228,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SCNPath/SCNPath.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -239,7 +239,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -402,7 +402,7 @@
 		};
 		63C93196222CDB0E00DF5850 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BE7324B0A58F52A7F1E05C4B /* Pods-ARMap.debug.xcconfig */;
+			baseConfigurationReference = 5C2B0E28D766C80006A0CF1D /* Pods-ARMap.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -421,7 +421,7 @@
 		};
 		63C93197222CDB0E00DF5850 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */;
+			baseConfigurationReference = D85BD4AFAED341D564EC397E /* Pods-ARMap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
