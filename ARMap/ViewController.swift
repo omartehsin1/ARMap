@@ -107,8 +107,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     func trackingLocation(for currentLocation: CLLocation) {
         if currentLocation.horizontalAccuracy <= 65.0 {
             updateLocations.append(currentLocation)
+            updateNodePosition()
             print("@6")
             centerMapOnLocation(location: currentLocation.coordinate)
+            
         }
     }
     
@@ -139,7 +141,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                 }
             }
         }
-        updateNodePosition()
+        
     }
     
     // add info to AR nodes
@@ -156,11 +158,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     //Path
     private func path(){
         let pathMaterial = SCNMaterial()
-        pathMaterial.diffuse.contents = UIImage(named: "art.scnassets/8k_earth_daymap.jpg")
+        pathMaterial.diffuse.contents = UIColor.blue.withAlphaComponent(0.8)
         pathNode.materials = [pathMaterial]
-        pathNode.position.y = -7
+        pathNode.position.y = 0
 //        pathNode.position.y -= 0.5
-        pathNode.width = 4
+        pathNode.width = 2.5
         sceneView.scene.rootNode.addChildNode(pathNode)
         print("@A")
     }
@@ -184,8 +186,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     
     private func addAnnotations(){
         mapView.addOverlay(myRoute.polyline)
-         mapView.addOverlay(myRoute.polyline)
-        mapView(mapView, rendererFor: myRoute.polyline)
+//         mapView.addOverlay(myRoute.polyline)
+//        mapView(mapView, rendererFor: myRoute.polyline)
     }
     
     //gets coordinates
@@ -251,7 +253,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
                         let scale = 100 / Float(distance)
                         node.scale = SCNVector3(x: scale, y: scale, z: scale)
                         node.position = position
-                        node.anchor = ARAnchor(transform: translation)
+//                        node.anchor = ARAnchor(transform: translation)
                         print("@8")
                     }
                 }
@@ -273,6 +275,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
             }
             SCNTransaction.commit()
             path()
+
+
+
         }
         mapView.addOverlay(myRoute.polyline)
     }
