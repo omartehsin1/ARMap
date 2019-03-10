@@ -35,6 +35,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     private var annotationColor = UIColor.blue
     let locationManager = CLLocationManager()
     let regionRadius: CLLocationDistance = 800
+    var hasDetectedPlane: Bool = false
+    
     private var locationUpdate = 0 {
         didSet {
             if locationUpdate >= 5 {
@@ -99,6 +101,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     
     func runSession(){
      let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
         configuration.environmentTexturing = .automatic
         configuration.worldAlignment = .gravityAndHeading
         sceneView.session.run(configuration, options: [.resetTracking])
@@ -310,6 +313,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+    
 }
 extension ViewController: MKMapViewDelegate, CLLocationManagerDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {

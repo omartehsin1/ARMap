@@ -19,6 +19,11 @@ protocol HandleMapSearch {
 class MapViiewController: UIViewController {
     @IBOutlet var searchBarMap: UISearchBar!
     @IBOutlet weak var mapView: MKMapView!
+    
+    let iconImage = UIImageView(image: UIImage(named: "map")!)
+    
+    let splashView = UIView()
+
  
     
     var regionRadius: CLLocationDistance = 400
@@ -43,6 +48,20 @@ class MapViiewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        splashView.backgroundColor = UIColor.lightGray
+        
+        view.addSubview(splashView)
+        
+        splashView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
+        
+        iconImage.contentMode = .scaleAspectFit
+        
+        splashView.addSubview(iconImage)
+        
+        iconImage.frame = CGRect(x: splashView.frame.midX - 35, y: splashView.frame.midY - 35, width: 70, height: 70)
+        
+        
         locationManager.requestAlwaysAuthorization()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -73,6 +92,53 @@ class MapViiewController: UIViewController {
         locationSearchTable.mapView = mapView
         
         locationSearchTable.handleMapSearchDelegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            
+            self.scaleDownAnimation()
+            
+        }
+        
+    }
+    
+    func scaleDownAnimation() {
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            
+            self.iconImage.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+            
+        }) { (success) in
+            
+            self.scaleUpAnimation()
+            
+        }
+        
+    }
+    
+    func scaleUpAnimation() {
+        
+        UIView.animate(withDuration: 0.35, delay: 0.1, options: .curveEaseIn, animations: {
+            
+            self.iconImage.transform = CGAffineTransform(scaleX: 5, y: 5)
+            
+            
+        }) { (success) in
+            
+            self.removeSplashScreen()
+            
+        }
+        
+    }
+    
+    func removeSplashScreen() {
+        
+        
+        splashView.removeFromSuperview()
+        
     }
     
     func centerMapOnLocation(location: CLLocationCoordinate2D, distance: CLLocationDistance){
