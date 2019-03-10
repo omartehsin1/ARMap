@@ -31,7 +31,7 @@ class Node: SCNNode {
     
     func makeBox(with size: CGFloat, color: UIColor)-> SCNNode{
         let geometry = SCNBox(width: size, height: size, length: size, chamferRadius: 0.5)
-        geometry.firstMaterial?.diffuse.contents = UIImage(named: "art.scnassets/8k_sun.jpg")
+        geometry.firstMaterial?.diffuse.contents = UIImage(named: "art.scnassets/8k_earth_daymap.jpg")
         let cube = SCNNode(geometry: geometry)
         return cube
     }
