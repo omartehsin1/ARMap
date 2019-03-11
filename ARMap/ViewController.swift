@@ -12,6 +12,20 @@ import ARKit
 import MapKit
 import SCNPath
 
+struct NodeCreator {
+    
+    static func bluePlane(anchor: ARPlaneAnchor) -> SCNNode {
+        let plane = SCNPlane(width: CGFloat(anchor.extent.x), height: CGFloat(anchor.extent.z))
+        plane.firstMaterial?.diffuse.contents = #colorLiteral(red: 0, green: 0.7457480216, blue: 1, alpha: 0.3189944402)
+        
+        let planeNode = SCNNode()
+        planeNode.geometry = plane
+        planeNode.position = SCNVector3Make(anchor.center.x, 0, anchor.center.z)
+        planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 1, 0, 0)
+        return planeNode
+    }
+}
+
 
 class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
 
@@ -36,6 +50,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
     let locationManager = CLLocationManager()
     let regionRadius: CLLocationDistance = 800
     var hasDetectedPlane: Bool = false
+    var isDebugMode = false
     
     private var locationUpdate = 0 {
         didSet {
@@ -63,6 +78,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         setUpScene()
         setUpNavigation()
         trackingLocation(for: myLocation)
+        
+        let compassButton = MKCompassButton(mapView: mapView)   // Make a new compass
+        compassButton.compassVisibility = .visible          // Make it visible
+        
+        mapView.addSubview(compassButton) // Add it to the view
+        
+        // Position it as required
+        
+        compassButton.translatesAutoresizingMaskIntoConstraints = false
+        compassButton.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -12).isActive = true
+        compassButton.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 12).isActive = true
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -155,18 +181,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         }
         for location in locations {
             placeNode(for: location)
+            if location == locations.last {
+                print("last location is ", location)
+            }
         }
         print("@2")
     }
     //Path
     private func path(){
         let pathMaterial = SCNMaterial()
-        pathMaterial.diffuse.contents = UIColor.blue.withAlphaComponent(0.8)
+        pathMaterial.diffuse.contents = UIColor.blue.withAlphaComponent(0.5)
         pathNode.materials = [pathMaterial]
-        pathNode.position.y = 0
+//        pathNode.position.y = 0
 //        pathNode.position.y -= 0.5
         pathNode.width = 2.5
         sceneView.scene.rootNode.addChildNode(pathNode)
+    
         print("@A")
     }
 
@@ -314,6 +344,34 @@ class ViewController: UIViewController, ARSCNViewDelegate, Mapable {
         
     }
     
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        if let planeAnchor = anchor as? ARPlaneAnchor {
+            
+            if !hasDetectedPlane {
+                let planeYPosition = SCNVector3.positionForNode(transform: planeAnchor.transform).y
+                pathNode.position.y = planeYPosition
+                
+
+                hasDetectedPlane = true
+            }
+            
+            if isDebugMode {
+                let planeNode = NodeCreator.bluePlane(anchor: planeAnchor)
+                node.addChildNode(planeNode)
+            }
+        }
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        if isDebugMode, let planeAnchor = anchor as? ARPlaneAnchor {
+            if let plane = node.childNodes.first?.geometry as? SCNPlane {
+                plane.updateSize(toMatch: planeAnchor)
+            }
+        }
+    }
+    
+    
+    
 }
 extension ViewController: MKMapViewDelegate, CLLocationManagerDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -332,5 +390,12 @@ extension ViewController: MKMapViewDelegate, CLLocationManagerDelegate {
         updateLocations.append(currentLocation) 
         
         mapView.userTrackingMode = .followWithHeading 
+    }
+}
+
+extension SCNPlane {
+    func updateSize(toMatch anchor: ARPlaneAnchor) {
+        self.width = CGFloat(anchor.extent.x)
+        self.height = CGFloat(anchor.extent.z)
     }
 }
