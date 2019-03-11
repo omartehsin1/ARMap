@@ -2,8 +2,8 @@
 //  ExtensioToCoreLocation.swift
 //  ARMap
 //
-//  Created by David on 2019-03-04.
-//  Copyright © 2019 David. All rights reserved.
+//  Created by David Gonzalez, Van Luu, Omar Tehsin on 2019-03-05.
+//  Copyright © 2019 David Gonzalez, Van Luu, Omar Tehsin. All rights reserved.
 //
 
 import Foundation
