@@ -21,6 +21,9 @@ class Node: SCNNode {
         self.location = location
         self.title = title
         super.init()
+                let billboardConstraint = SCNBillboardConstraint()
+                billboardConstraint.freeAxes = SCNBillboardAxis.Y
+                constraints = [billboardConstraint]
         
     }
     

@@ -68,11 +68,13 @@
                                     <outlet property="delegate" destination="t9M-3c-I3m" id="sk4-MH-a7t"/>
                                 </connections>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mb8-Xb-1qt">
-                                <rect key="frame" x="361" y="76" width="53" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="27"/>
-                                <state key="normal" title="AR">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mb8-Xb-1qt">
+                                <rect key="frame" x="356" y="72" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="RvE-gd-ahW"/>
+                                    <constraint firstAttribute="width" constant="50" id="TMh-AT-GVe"/>
+                                </constraints>
+                                <state key="normal" title="AR" image="location">
                                     <color key="titleColor" white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -83,9 +85,11 @@
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="GnE-nt-7YK" firstAttribute="leading" secondItem="KdG-YJ-Q33" secondAttribute="leading" id="B1V-fR-01h"/>
+                            <constraint firstItem="mb8-Xb-1qt" firstAttribute="top" secondItem="KdG-YJ-Q33" secondAttribute="top" constant="8" id="KIA-Uc-Hyi"/>
                             <constraint firstItem="GnE-nt-7YK" firstAttribute="trailing" secondItem="KdG-YJ-Q33" secondAttribute="trailing" id="WZE-PQ-Zhd"/>
                             <constraint firstItem="GnE-nt-7YK" firstAttribute="bottom" secondItem="KdG-YJ-Q33" secondAttribute="bottom" id="Z5u-5l-a7G"/>
                             <constraint firstItem="GnE-nt-7YK" firstAttribute="top" secondItem="idq-Os-nof" secondAttribute="top" id="byF-ca-ib4"/>
+                            <constraint firstItem="KdG-YJ-Q33" firstAttribute="trailing" secondItem="mb8-Xb-1qt" secondAttribute="trailing" constant="8" id="sg7-fw-OLD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KdG-YJ-Q33"/>
                     </view>
@@ -186,4 +190,7 @@
             <point key="canvasLocation" x="-668.11594202898561" y="105.97826086956522"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="location" width="466.63290405273438" height="466.63290405273438"/>
+    </resources>
 </document>
