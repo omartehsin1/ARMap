@@ -1,6 +1,6 @@
 # ARMap
 
-Navigation App created with AR Kit, Scene Kit and Core Location to help guide users to their destination with an AR Path
+Navigation App created with AR Kit, Scene Kit and Core Location to help guide users to their destination with an AR Path. The app converts longitude and latitude coordinates into SCN Vectors creating nodes.
 
 
 
