@@ -23,3 +23,9 @@ Look out for annotations
 
 ![annotations](https://user-images.githubusercontent.com/33768337/54449363-4562ac00-4724-11e9-8680-76ae03525a67.gif)
 
+
+
+# FUTURE GOALS
+
+- To improve accuracy
+- Incorporate ML model to differentiate between roads and sidewalks.
