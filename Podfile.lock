@@ -1,16 +1,29 @@
 PODS:
+  - GoogleMaps (3.0.3):
+    - GoogleMaps/Maps (= 3.0.3)
+  - GoogleMaps/Base (3.0.3)
+  - GoogleMaps/Maps (3.0.3):
+    - GoogleMaps/Base
+  - GooglePlaces (3.0.3):
+    - GoogleMaps/Base (= 3.0.3)
   - SCNPath (1.0.0)
 
 DEPENDENCIES:
+  - GoogleMaps
+  - GooglePlaces
   - SCNPath
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - GoogleMaps
+    - GooglePlaces
     - SCNPath
 
 SPEC CHECKSUMS:
+  GoogleMaps: fd5c9fa58871781b9fb94d4936f19c69fe60ce32
+  GooglePlaces: f09e76993c9c3ee4af8f4f7f535bb94d6aa3b649
   SCNPath: 6411e93e6358bc020e306df192075f24198f6a7c
 
-PODFILE CHECKSUM: 9d516d6bd374d404e125b59b302dad4d8b6b18be
+PODFILE CHECKSUM: cd0a8732e41e8562cba2d4df98032142c4f78353
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0

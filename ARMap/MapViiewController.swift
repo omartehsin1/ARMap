@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import ARKit
+import GoogleMaps
 
 protocol HandleMapSearch {
     func dropPinZoomIn(placemark:MKPlacemark)
@@ -48,6 +49,25 @@ class MapViiewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        GMSServices.provideAPIKey("AIzaSyBQTVNjCMLjDy3nAE34ekSh9KOgux6ZjCM")
+        
+        guard let locationLat = locationManager.location?.coordinate.latitude else {
+            return
+        }
+        guard let locationLon = locationManager.location?.coordinate.longitude else {
+            return
+        }
+        let camera = GMSCameraPosition.camera(withLatitude: locationLat, longitude: locationLon, zoom: 10)
+        let googleMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        view = googleMapView
+        
+        let currentLocation = CLLocationCoordinate2DMake(locationLat, locationLon)
+        let marker = GMSMarker(position: currentLocation)
+        marker.title = "Here!"
+        marker.map = googleMapView
+        
+        
+        
         
         splashView.backgroundColor = UIColor.lightGray
         
@@ -157,39 +177,7 @@ class MapViiewController: UIViewController {
         currentPathPart = [[]]
     }
     
-//    @objc func getDirection(to destination: MKMapItem){
-//        clearData()
-//        let sourcePlaceMark = MKPlacemark(coordinate: currentCoordinate.coordinate)
-//        let sourceMapItem = MKMapItem(placemark: sourcePlaceMark)
-//
-//        let directionRequest = MKDirections.Request()
-//        directionRequest.source = sourceMapItem
-//        directionRequest.destination = destination
-//        directionRequest.transportType = .walking
-//
-//        //selectedPin = sourcePlaceMark
-//        let directions = MKDirections(request: directionRequest)
-//        directions.calculate { (response, error) in
-//            if error != nil {
-//                print("Error2: \(String(describing: error))")
-//            } else {
-//                guard let response = response else {return}
-//                guard let primaryRoute = response.routes.first else {return}
-//                self.route = primaryRoute
-//                print("Main Route Polyline : \(String(describing: primaryRoute.polyline.coordinate))")
-//                //Add each MKRoute.step to array of MKRouteSteps.
-//                for step in primaryRoute.steps {
-//                   print(step.polyline.coordinate)
-//                    self.steps.append(step)
-//                }
-//                //Draw each line on 2d map
-//                self.mapView.addOverlay(primaryRoute.polyline)
-//                self.polylines = [primaryRoute.polyline]
-//                //self.steps = primaryRoute.steps
-//                self.getLocation()
-//            }
-//        }
-//    }
+
     
      private func getLocation() {
         for (index, step) in steps.enumerated() {

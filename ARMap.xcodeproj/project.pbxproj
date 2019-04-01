@@ -135,6 +135,7 @@
 				63C9317E222CDB0E00DF5850 /* Frameworks */,
 				63C9317F222CDB0E00DF5850 /* Resources */,
 				99CD29A6E524ADCE85B4D510 /* [CP] Embed Pods Frameworks */,
+				F39E459089289BD7A35AD02F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -228,7 +229,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SCNPath/SCNPath.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -239,7 +240,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F39E459089289BD7A35AD02F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ARMap/Pods-ARMap-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -406,13 +431,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CJ99886F8U;
+				DEVELOPMENT_TEAM = 3CHBMWBLU9;
 				INFOPLIST_FILE = ARMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.vanluu.ARMap;
+				PRODUCT_BUNDLE_IDENTIFIER = com.omartehsin.ARMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -421,17 +446,17 @@
 		};
 		63C93197222CDB0E00DF5850 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0FE5516FAF058148A0A6AD16 /* Pods-ARMap.release.xcconfig */;
+			baseConfigurationReference = 961C0CF792CC78BF5F778D13 /* Pods-ARMap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CJ99886F8U;
+				DEVELOPMENT_TEAM = 3CHBMWBLU9;
 				INFOPLIST_FILE = ARMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.vanluu.ARMap;
+				PRODUCT_BUNDLE_IDENTIFIER = com.omartehsin.ARMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
