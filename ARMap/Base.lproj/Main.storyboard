@@ -62,12 +62,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" showsScale="YES" showsTraffic="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GnE-nt-7YK">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                                <connections>
-                                    <outlet property="delegate" destination="t9M-3c-I3m" id="sk4-MH-a7t"/>
-                                </connections>
-                            </mapView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tMd-DB-84A">
+                                <rect key="frame" x="0.0" y="64" width="414" height="672"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mb8-Xb-1qt">
                                 <rect key="frame" x="356" y="72" width="50" height="50"/>
                                 <constraints>
@@ -84,18 +83,14 @@
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="GnE-nt-7YK" firstAttribute="leading" secondItem="KdG-YJ-Q33" secondAttribute="leading" id="B1V-fR-01h"/>
                             <constraint firstItem="mb8-Xb-1qt" firstAttribute="top" secondItem="KdG-YJ-Q33" secondAttribute="top" constant="8" id="KIA-Uc-Hyi"/>
-                            <constraint firstItem="GnE-nt-7YK" firstAttribute="trailing" secondItem="KdG-YJ-Q33" secondAttribute="trailing" id="WZE-PQ-Zhd"/>
-                            <constraint firstItem="GnE-nt-7YK" firstAttribute="bottom" secondItem="KdG-YJ-Q33" secondAttribute="bottom" id="Z5u-5l-a7G"/>
-                            <constraint firstItem="GnE-nt-7YK" firstAttribute="top" secondItem="idq-Os-nof" secondAttribute="top" id="byF-ca-ib4"/>
                             <constraint firstItem="KdG-YJ-Q33" firstAttribute="trailing" secondItem="mb8-Xb-1qt" secondAttribute="trailing" constant="8" id="sg7-fw-OLD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KdG-YJ-Q33"/>
                     </view>
                     <navigationItem key="navigationItem" id="kUc-vW-9kd"/>
                     <connections>
-                        <outlet property="mapView" destination="GnE-nt-7YK" id="5mw-nF-Kvg"/>
+                        <outlet property="mapView" destination="tMd-DB-84A" id="HEg-Sl-FIn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mTT-Cf-Cof" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -191,6 +186,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="location" width="466.63290405273438" height="466.63290405273438"/>
+        <image name="location" width="512" height="512"/>
     </resources>
 </document>

@@ -7,19 +7,20 @@
 //
 
 import UIKit
-import MapKit
+//import MapKit
 import CoreLocation
 import ARKit
 import GoogleMaps
 
 protocol HandleMapSearch {
-    func dropPinZoomIn(placemark:MKPlacemark)
+    func dropPinZoomIn(placemark:GMSMarker)
     func createDirectionToDestintation(destCoordinates: CLLocationCoordinate2D)
 }
 
 class MapViiewController: UIViewController {
     @IBOutlet var searchBarMap: UISearchBar!
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapView: UIView!
+    
     
     let iconImage = UIImageView(image: UIImage(named: "map")!)
     
@@ -33,7 +34,7 @@ class MapViiewController: UIViewController {
     var currentCoordinate = CLLocation()
     
     private var steps = [MKRoute.Step]()
-    private var polylines = [MKPolyline]()
+    private var polylines = [GMSPolyline]()
     private var route = MKRoute()
     private var currentPathPart = [[CLLocationCoordinate2D]]()
     private var pathIndicators = [[CLLocationCoordinate2D]]()
@@ -41,8 +42,8 @@ class MapViiewController: UIViewController {
     var directionsArray: [MKDirections] = []
     var resultSearchController : UISearchController? = nil
     
-    var selectedPin:MKPlacemark? = nil
-    var selectedOverlay : MKOverlayRenderer? = nil
+    var selectedPin:GMSMarker? = nil
+    var selectedOverlay : GMSOverlayLayer? = nil
     
     var locationSearchTableVC : LocationSearchTable?
     
@@ -59,8 +60,8 @@ class MapViiewController: UIViewController {
         }
         let camera = GMSCameraPosition.camera(withLatitude: locationLat, longitude: locationLon, zoom: 10)
         let googleMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        view = googleMapView
-        
+        //view = googleMapView
+        self.mapView = googleMapView
         let currentLocation = CLLocationCoordinate2DMake(locationLat, locationLon)
         let marker = GMSMarker(position: currentLocation)
         marker.title = "Here!"
@@ -353,7 +354,7 @@ extension MapViiewController: HandleMapSearch {
         }
     }
     
-    func dropPinZoomIn(placemark:MKPlacemark){
+    func dropPinZoomIn(placemark:GMSMarker){
         // cache the pin
         selectedPin = placemark
         // clear existing pins
